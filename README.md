@@ -49,6 +49,8 @@ Humans stay at the merge gate. Agents never merge to `main`.
 ## Repo layout
 
 ```
+apps/              deployable applications, one directory per app (filled by /setup-stack)
+packages/          shared libraries used by apps
 .claude/
   agents/          pm, implementer, reviewer: the actors, each with its own context and tools
   skills/          /build (inner loop), /pm (outer loop), /setup-stack (one-time adapt)
@@ -60,6 +62,8 @@ docs/DESIGN.md     the research-backed rationale for every design choice
 BACKLOG.md         local backlog fallback when GitHub Issues aren't available
 CLAUDE.md          conventions + the command contract every agent relies on
 ```
+
+The `apps/` + `packages/` layout is fixed regardless of stack; the workspace *tooling* underneath (pnpm workspaces, cargo workspaces, Nx, moon, none) is chosen per stack by `/setup-stack`. A predictable structure is what keeps agent navigation and conventions identical across every repo built from this template.
 
 ## Safety rails (deliberate, evidence-backed design choices)
 

@@ -13,7 +13,7 @@ Ask the user (AskUserQuestion) for their stack (language/framework, package mana
 
 ## 2. Scaffold minimally
 
-Use the stack's official initializer where one exists. If the stack has a workspace convention (pnpm workspaces, cargo workspaces, uv workspaces, ...), scaffold as a monorepo (`apps/`, `packages/`) so the project stays agent-navigable as it grows. Keep it minimal: the loop needs something to lint, test, build, and run, not a demo app. Include at least one real passing test, so the contract's test command is meaningful from day one. Extend `.gitignore` for the stack.
+Use the stack's official initializer where one exists, scaffolding into the repo's fixed monorepo layout (see CLAUDE.md): the first app in `apps/<name>`, shared code in `packages/<name>`, even for a single app. Wire up the stack's workspace tooling when it has one (pnpm workspaces, cargo workspaces, uv workspaces, Nx, moon, ...); a plain directory layout is fine when it doesn't. Keep it minimal: the loop needs something to lint, test, build, and run, not a demo app. Include at least one real passing test, so the contract's test command is meaningful from day one. Extend `.gitignore` for the stack.
 
 ## 3. Make the app agent-testable
 
