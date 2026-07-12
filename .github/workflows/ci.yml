@@ -16,10 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-      # Wired by /setup-stack, one step per command-contract entry, e.g.:
-      # - uses: actions/setup-node@v4
+      # Wired by /setup-stack, one step per command-contract entry. Pin any new
+      # action to a full commit SHA; the security scan blocks mutable tags. E.g.:
+      # - uses: actions/setup-node@<commit-sha> # v4
       #   with: { node-version: 24 }
       # - run: npm ci
       # - run: <check command>
@@ -36,5 +37,5 @@ jobs:
     container:
       image: semgrep/semgrep
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - run: semgrep scan --config auto --error
