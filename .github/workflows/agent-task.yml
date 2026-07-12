@@ -1,0 +1,50 @@
+# Inner loop, headless: label an issue `agent` and the implement→review loop runs
+# in CI, opening a PR when the reviewer approves.
+#
+# Setup:
+#   1. Repo secret ANTHROPIC_API_KEY (Settings → Secrets → Actions)
+#   2. Create the `agent` label
+#   3. Allow Actions to create PRs: Settings → Actions → General →
+#      "Allow GitHub Actions to create and approve pull requests"
+name: Agent task
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: agent-task # one agent task at a time, repo-wide
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.event.label.name == 'agent'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Stack setup (uncomment/adjust after /setup-stack, so the command
+      # contract can actually run in CI):
+      # - uses: actions/setup-node@v4
+      #   with: { node-version: 24 }
+      # - run: npm ci
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Run the /build skill for issue #${{ github.event.issue.number }}.
+            This is a headless run: when the reviewer approves, push the task
+            branch and open a PR (body: summary + "Closes #${{ github.event.issue.number }}"),
+            then comment the PR link on the issue. If the loop escalates instead,
+            comment the unresolved findings on the issue and remove the `agent`
+            label so a human can take over.
+          claude_args: '--max-turns 150'

@@ -1,0 +1,33 @@
+# Outer loop, autonomous: on a schedule, the PM agent triages the backlog,
+# picks ONE ready issue, refreshes its spec, and labels it `agent` — which
+# triggers agent-task.yml. Humans still hold the merge gate.
+#
+# Disabled by default: uncomment the `schedule` block to enable. Requires the
+# same setup as agent-task.yml.
+name: PM triage
+
+on:
+  workflow_dispatch: {}
+  # schedule:
+  #   - cron: '0 8 * * 1-5' # weekday mornings UTC
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  pm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Run the /pm skill with --dispatch. Remember: dispatch at most one
+            issue, and none if an `agent`-labeled issue is already open. Post
+            your triage summary as output; if the backlog has no ready items,
+            just report that.
+          claude_args: '--max-turns 50'

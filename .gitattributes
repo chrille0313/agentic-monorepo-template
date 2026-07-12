@@ -1,0 +1,9 @@
+# Normalize to LF in the repo and on checkout, on every platform.
+* text=auto eol=lf
+
+# Binary files — never normalize
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.woff2 binary

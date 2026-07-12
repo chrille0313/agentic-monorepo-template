@@ -1,0 +1,19 @@
+# Dependencies & build output (extend per stack via /setup-stack).
+# Output dirs are anchored to the root so they can't swallow things like
+# .claude/skills/build/.
+node_modules/
+/dist/
+/build/
+/target/
+__pycache__/
+*.pyc
+.venv/
+
+# Secrets & local config
+.env
+.env.*
+!.env.example
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
