@@ -25,16 +25,23 @@ Round N:
 
 1. **Implement** — spawn the `implementer` agent with the full spec text. On round 2+, message the *same* implementer (it has the context) with the reviewer's blocking findings verbatim.
 2. Sanity-check its report: if `STATUS: BLOCKED`, stop and surface it to the user.
-3. **Review** — spawn a **fresh** `reviewer` agent each round (never reuse; fresh context is the point). Give it only: the spec, the branch/diff reference, and the round number. Never forward the implementer's report or reasoning.
-4. Route the verdict:
+3. **Gate** — a review round only starts once check/test/build pass; red gates go straight back to the implementer without consuming a round.
+4. **Review** — spawn a **fresh** `reviewer` agent each round (never reuse; fresh context is the point). Give it only: the spec, the branch/diff reference, and the round number. Never forward the implementer's report or reasoning.
+5. Route the verdict:
    - `APPROVE` → exit loop to step 4.
-   - `REQUEST_CHANGES` → next round with the blocking findings. If a finding was already disputed by the implementer with evidence in a prior round and the reviewer repeats it, surface the disagreement to the user instead of looping.
+   - `REQUEST_CHANGES` → next round with the blocking findings.
+   - **No-progress exit**: if the round produced the same blocking findings as the previous one, or the diff didn't change, stop early and escalate — more rounds provably won't help.
+   - **Disputed finding**: if the implementer disputed a finding with evidence and a reviewer restates it — interactive: surface the disagreement to the user; headless: spawn a fresh judge agent (general-purpose) with only the spec, the finding, and both sides' evidence; its ruling on that finding is final. Never let implementer and reviewer negotiate to consensus.
    - After round 3 still not approved → **stop and escalate**: present the spec, what was built, and the unresolved findings. Do not keep looping; do not merge anything.
 
 ## 4. On approval
 
 1. Run the command contract yourself once (trust but verify).
 2. Commit on the task branch (conventional commit referencing the source issue).
-3. **Interactive session** → present a summary (what was built, review rounds, findings fixed) and ask whether to push + open a PR.
-   **Headless/CI session** → push and open a PR with the summary in the body, `Closes #<n>`, and comment the PR link on the issue.
-4. Never merge. The merge gate is human.
+3. **Interactive session** → present a summary and ask whether to push + open a PR.
+   **Headless/CI session** → push and open a PR, `Closes #<n>` in the body, and comment the PR link on the issue.
+4. The summary/PR body must make the human gate an *informed* check, not a rubber stamp:
+   - what was built, mapped to the acceptance criteria
+   - review-round history: findings by severity, fixed vs disputed
+   - verification evidence: which commands ran (contract + smoke) and their results
+5. Never merge. The merge gate is human.

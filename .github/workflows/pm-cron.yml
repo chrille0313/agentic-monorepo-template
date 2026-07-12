@@ -27,7 +27,8 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
             Run the /pm skill with --dispatch. Remember: dispatch at most one
-            issue, and none if an `agent`-labeled issue is already open. Post
-            your triage summary as output; if the backlog has no ready items,
-            just report that.
-          claude_args: '--max-turns 50'
+            issue, and none if an `agent`-labeled issue is already open. Before
+            dispatching, verify the issue and its spec are consistent — a bad
+            spec cascades through every downstream agent. If the backlog has
+            no ready items, just report that.
+          claude_args: '--max-turns 50 --max-budget-usd 5'

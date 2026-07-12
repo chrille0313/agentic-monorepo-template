@@ -84,6 +84,15 @@ for (let round = 1; round <= MAX_ROUNDS; round++) {
     log(`Approved in round ${round}`)
     return { approved: true, rounds, review: lastReview }
   }
+
+  // No-progress exit: identical blocking findings to last round means another
+  // round provably won't help — escalate now instead of riding out the cap.
+  const key = fs => JSON.stringify(fs.map(f => `${f.location}|${f.defect}`).sort())
+  if (findings.length && key(blocking) === key(findings)) {
+    log(`Round ${round}: no progress (same blocking findings) — escalating`)
+    return { approved: false, escalate: true, reason: 'no-progress', rounds, unresolvedFindings: blocking, review: lastReview }
+  }
+
   log(`Round ${round}: ${blocking.length} blocking finding(s)`)
   findings = blocking
 }
