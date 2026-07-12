@@ -24,4 +24,4 @@ Present the plan: approach, slice decomposition, ordering with dependencies, and
 - Create a tracking issue holding a task list of all slices so progress reads at a glance.
 - Report what was created and offer the first dispatch: `/build` on the first slice, or the `agent` label to run it in CI.
 
-A good plan often yields 3 issues, not 15. Small slices converge in 1-2 review rounds; sprawling ones burn the cap.
+Issue count follows from scope: a small feature may be 2 slices, a long-term roadmap may be 20. The invariant is slice size, not count: each slice small enough that the loop converges in 1-2 review rounds. For genuinely large plans, detail the near-term slices fully and keep later phases as coarser placeholder issues; a future /plan run refines them when their turn comes.
