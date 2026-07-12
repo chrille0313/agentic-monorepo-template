@@ -37,7 +37,7 @@ Round N:
 ## 4. On approval
 
 1. Run the command contract yourself once (trust but verify).
-2. Commit on the task branch (conventional commit referencing the source issue).
+2. Commit on the task branch following the `commit` skill: small modular commits, referencing the source issue.
 3. **Interactive session** → present a summary and ask whether to push + open a PR.
    **Headless/CI session** → push and open a PR, `Closes #<n>` in the body, and comment the PR link on the issue.
 4. The summary/PR body must make the human gate an *informed* check, not a rubber stamp:
