@@ -9,7 +9,7 @@ Input (`$ARGUMENTS`): optionally `--dispatch`.
 
 ## 1. Triage
 
-Spawn the `pm` agent to: read the backlog (GitHub Issues if a remote exists, else BACKLOG.md), report backlog health (stale items, blocked items, items missing acceptance criteria), pick the ONE most valuable ready-or-readyable item, and produce a build-ready spec for it.
+Spawn the `pm` agent for a triage. Its deliverables: backlog health (stale items, blocked items, items missing acceptance criteria), the ONE most valuable ready-or-readyable item, and a build-ready spec for it.
 
 ## 2. Report
 

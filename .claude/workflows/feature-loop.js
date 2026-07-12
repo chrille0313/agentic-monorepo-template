@@ -72,7 +72,7 @@ for (let round = 1; round <= MAX_ROUNDS; round++) {
   // Fresh reviewer every round. It gets only the spec and the working tree, never the
   // implementer's report; that separation is the point of the loop.
   lastReview = await agent(
-    `Review the uncommitted changes in the current working tree (git diff, plus git diff --stat for scope) strictly against this task spec. Run the command contract from CLAUDE.md.\n\n${spec}`,
+    `Review the uncommitted changes in the current working tree strictly against this task spec. Run the command contract from CLAUDE.md.\n\n${spec}`,
     { agentType: 'reviewer', label: `review:r${round}`, phase: 'Review', schema: REVIEW_SCHEMA },
   )
   if (lastReview === null) throw new Error(`Reviewer died in round ${round}`)

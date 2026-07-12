@@ -11,7 +11,7 @@ Outcome: a plan the user has explicitly approved, fanned out into spec-formatted
 
 ## 1. Understand before proposing
 
-Explore the codebase enough to ground the plan in what exists. Then interview the user (AskUserQuestion, as many rounds as it takes) until you can state without guessing: the goal and why now, the user-visible behavior, constraints (stack, compatibility, performance, security), what is explicitly out of scope, and how success is verified. Challenge vague answers instead of absorbing them: "proper auth" is not a requirement; "email+password login with session cookies, no OAuth yet" is. Surface the decisions the user hasn't realized they're making.
+Interview the user, as many rounds as it takes, until you can state without guessing: the goal and why now, the user-visible behavior, constraints (stack, compatibility, performance, security), what is explicitly out of scope, and how success is verified. The plan must be grounded in the codebase as it actually is, not as assumed. Challenge vague answers instead of absorbing them: "proper auth" is not a requirement; "email+password login with session cookies, no OAuth yet" is. Surface the decisions the user hasn't realized they're making.
 
 ## 2. Propose, then iterate to approval
 
