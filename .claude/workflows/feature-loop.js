@@ -1,7 +1,7 @@
 export const meta = {
   name: 'feature-loop',
   description: 'Deterministic implement → review → fix loop for one task spec (max 3 rounds)',
-  whenToUse: 'When you want the inner loop with scripted control flow instead of the /build skill — e.g. Workflow({name: "feature-loop", args: {spec: "..."}})',
+  whenToUse: 'When you want the inner loop with scripted control flow instead of the /build skill, e.g. Workflow({name: "feature-loop", args: {spec: "..."}})',
   phases: [
     { title: 'Implement', detail: 'implementer agent builds against the spec' },
     { title: 'Review', detail: 'fresh reviewer judges spec vs diff' },
@@ -9,7 +9,7 @@ export const meta = {
 }
 
 // Runs agents sequentially in the CURRENT branch/worktree (no per-agent isolation:
-// round N+1 must see round N's changes). The caller owns git state — create the
+// round N+1 must see round N's changes). The caller owns git state: create the
 // task branch before invoking, commit after.
 
 const spec = args && args.spec
@@ -59,7 +59,7 @@ for (let round = 1; round <= MAX_ROUNDS; round++) {
 
   const feedback = findings.length
     ? `\n\nA reviewer requested changes. Address EVERY blocking finding (fix it, or dispute with evidence):\n${
-        findings.map(f => `- [blocking] ${f.location} — ${f.defect}${f.suggestedFix ? ` (suggested: ${f.suggestedFix})` : ''}`).join('\n')
+        findings.map(f => `- [blocking] ${f.location}: ${f.defect}${f.suggestedFix ? ` (suggested: ${f.suggestedFix})` : ''}`).join('\n')
       }`
     : ''
 
@@ -69,8 +69,8 @@ for (let round = 1; round <= MAX_ROUNDS; round++) {
   )
   if (report === null) throw new Error(`Implementer died in round ${round}`)
 
-  // Fresh reviewer every round — it gets only the spec and the working tree, never the
-  // implementer's report. That separation is the point of the loop.
+  // Fresh reviewer every round. It gets only the spec and the working tree, never the
+  // implementer's report; that separation is the point of the loop.
   lastReview = await agent(
     `Review the uncommitted changes in the current working tree (git diff, plus git diff --stat for scope) strictly against this task spec. Run the command contract from CLAUDE.md.\n\n${spec}`,
     { agentType: 'reviewer', label: `review:r${round}`, phase: 'Review', schema: REVIEW_SCHEMA },
@@ -86,10 +86,10 @@ for (let round = 1; round <= MAX_ROUNDS; round++) {
   }
 
   // No-progress exit: identical blocking findings to last round means another
-  // round provably won't help — escalate now instead of riding out the cap.
+  // round provably won't help. Escalate now instead of riding out the cap.
   const key = fs => JSON.stringify(fs.map(f => `${f.location}|${f.defect}`).sort())
   if (findings.length && key(blocking) === key(findings)) {
-    log(`Round ${round}: no progress (same blocking findings) — escalating`)
+    log(`Round ${round}: no progress (same blocking findings), escalating`)
     return { approved: false, escalate: true, reason: 'no-progress', rounds, unresolvedFindings: blocking, review: lastReview }
   }
 
@@ -97,5 +97,5 @@ for (let round = 1; round <= MAX_ROUNDS; round++) {
   findings = blocking
 }
 
-// Iteration cap hit — escalate, don't thrash.
+// Iteration cap hit. Escalate, don't thrash.
 return { approved: false, escalate: true, rounds, unresolvedFindings: findings, review: lastReview }

@@ -49,4 +49,4 @@ jobs:
             comment the PR link on the issue. If the loop escalates instead,
             comment the unresolved findings on the issue and remove the `agent`
             label so a human can take over.
-          claude_args: '--max-turns 150 --max-budget-usd 15'
+          claude_args: '--max-turns 150'
