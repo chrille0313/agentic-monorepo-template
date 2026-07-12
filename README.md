@@ -56,8 +56,9 @@ packages/          shared libraries used by apps
   skills/          /build (inner loop), /pm (outer loop), /setup-stack (one-time adapt)
   workflows/       feature-loop.js, a deterministic scripted variant of the inner loop
   settings.json    pre-approved read-only permissions
-.github/workflows/ ci.yml (deterministic gates + security scan), agent-task.yml
-                   (label-triggered inner loop), pm-cron.yml (scheduled PM)
+.github/workflows/ ci.yml (contract gates, commit lint, workflow lint, security
+                   scan), agent-task.yml (label-triggered inner loop),
+                   pm-cron.yml (scheduled PM)
 docs/DESIGN.md     the research-backed rationale for every design choice
 BACKLOG.md         local backlog fallback when GitHub Issues aren't available
 CLAUDE.md          conventions + the command contract every agent relies on

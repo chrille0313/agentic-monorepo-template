@@ -29,6 +29,29 @@ jobs:
       - name: Contract not wired yet
         run: echo "Run /setup-stack to wire the command contract into this job."
 
+  # Conventional commits, enforced (CLAUDE.md states the rule; this checks it).
+  # Applies to agents and humans alike.
+  commits:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed # v6
+        with:
+          configFile: commitlint.config.mjs
+
+  # Lint the workflows themselves; until a stack exists they are most of the
+  # code in this repo, and agents edit them.
+  workflows-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: raven-actions/actionlint@3d39aea434753780c3b3d4a1a31c854b4dbf49d7 # v2
+
   # Unit tests are a floor, not a verdict: a large share of functionally-correct
   # AI-generated code still introduces security vulnerabilities. Scan independently.
   security:
