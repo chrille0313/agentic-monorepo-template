@@ -13,6 +13,11 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # An explicit prefix makes Dependabot write "ci(deps): bump ..." (lowercase),
+    # which passes the commitlint gate; its auto-detected format capitalizes
+    # "Bump" and fails subject-case.
+    commit-message:
+      prefix: ci(deps)
     # Wait before adopting fresh releases; compromised versions are usually
     # yanked within days of publication.
     cooldown:
@@ -28,6 +33,8 @@ updates:
   #   directory: /
   #   schedule:
   #     interval: weekly
+  #   commit-message:
+  #     prefix: chore(deps)
   #   cooldown:
   #     default-days: 7
   #   groups:
