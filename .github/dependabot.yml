@@ -1,25 +1,27 @@
 # Dependabot keeps two things fresh:
-#   1. GitHub Actions: active from day one. Updates the SHA-pinned `uses:` lines
-#      (and their version comments), so pinning stays secure without going stale.
-#   2. Package dependencies: wired by /setup-stack once a stack exists; a
-#      commented example is below.
+#   1. GitHub Actions: updates the SHA-pinned `uses:` lines (and their version
+#      comments), so pinning stays secure without going stale.
+#   2. npm: the repo's own toolchain (commitlint) lives in package.json from
+#      day one. /setup-stack extends this file when the chosen stack adds a
+#      new package ecosystem (cargo, pip, uv, gomod, maven, ...).
 #
-# Updates are grouped to cut PR noise and to keep related packages moving
+# Updates are grouped to cut PR noise and keep related packages moving
 # together; lone bumps within a framework family are a common way to break
-# the build.
+# the build. The 7-day cooldown avoids adopting fresh releases, since
+# compromised versions are usually yanked within days of publication.
 version: 2
 updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
-    # An explicit prefix makes Dependabot write "ci(deps): bump ..." (lowercase),
-    # which passes the commitlint gate; its auto-detected format capitalizes
-    # "Bump" and fails subject-case.
+    # This prefix style (prefix + include: scope) mirrors a config observed to
+    # produce lowercase "bump" subjects. Casing is ultimately decided by
+    # Dependabot's own heuristics, so commitlint also exempts Dependabot
+    # commits regardless (commitlint.config.mjs).
     commit-message:
-      prefix: ci(deps)
-    # Wait before adopting fresh releases; compromised versions are usually
-    # yanked within days of publication.
+      prefix: ci
+      include: scope
     cooldown:
       default-days: 7
     groups:
@@ -27,18 +29,17 @@ updates:
         patterns:
           - "*"
 
-  # Wired by /setup-stack for the chosen stack. Example for an npm/pnpm workspace
-  # (other ecosystems: cargo, pip, uv, gomod, maven, ...):
-  # - package-ecosystem: npm
-  #   directory: /
-  #   schedule:
-  #     interval: weekly
-  #   commit-message:
-  #     prefix: chore(deps)
-  #   cooldown:
-  #     default-days: 7
-  #   groups:
-  #     minor-and-patch:
-  #       update-types:
-  #         - minor
-  #         - patch
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: chore
+      include: scope
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
