@@ -45,7 +45,7 @@ jobs:
         run: >
           npx --yes
           -p @commitlint/cli@21.2.1
-          -p @commitlint/config-conventional@21.2.1
+          -p @commitlint/config-conventional@21.2.0
           commitlint
           --from ${{ github.event.pull_request.base.sha }}
           --to ${{ github.event.pull_request.head.sha }}
