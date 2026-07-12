@@ -2,6 +2,10 @@
   "name": "agentic-monorepo-template",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "commitlint": "commitlint"
+  },
   "devDependencies": {
     "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.2.0"

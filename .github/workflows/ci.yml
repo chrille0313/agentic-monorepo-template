@@ -20,9 +20,8 @@ jobs:
 
       # Wired by /setup-stack, one step per command-contract entry. Pin any new
       # action to a full commit SHA; the security scan blocks mutable tags. E.g.:
-      # - uses: actions/setup-node@<commit-sha> # v4
-      #   with: { node-version: 24 }
-      # - run: npm ci
+      # - uses: pnpm/action-setup@<commit-sha> # v4
+      # - run: pnpm install --frozen-lockfile
       # - run: <check command>
       # - run: <test command>
       # - run: <build command>
@@ -31,7 +30,8 @@ jobs:
 
   # Conventional commits, enforced (CLAUDE.md states the rule; this checks it).
   # Applies to agents and humans alike. commitlint versions come from the
-  # repo's own package.json (Dependabot keeps them current).
+  # repo's own package.json (Dependabot keeps them current); the pnpm version
+  # comes from its packageManager field.
   commits:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -40,10 +40,11 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 0
-      - run: npm ci
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - run: pnpm install --frozen-lockfile
       - name: commitlint
         run: >
-          npx commitlint
+          pnpm commitlint
           --from ${{ github.event.pull_request.base.sha }}
           --to ${{ github.event.pull_request.head.sha }}
           --verbose
