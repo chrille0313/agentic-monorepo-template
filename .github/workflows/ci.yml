@@ -30,7 +30,9 @@ jobs:
         run: echo "Run /setup-stack to wire the command contract into this job."
 
   # Conventional commits, enforced (CLAUDE.md states the rule; this checks it).
-  # Applies to agents and humans alike.
+  # Applies to agents and humans alike. Runs commitlint directly (pinned via
+  # npx) rather than through a wrapper action, so the linter version is ours
+  # to control and stays current.
   commits:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -39,9 +41,15 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 0
-      - uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed # v6
-        with:
-          configFile: commitlint.config.mjs
+      - name: commitlint
+        run: >
+          npx --yes
+          -p @commitlint/cli@21.2.1
+          -p @commitlint/config-conventional@21.2.1
+          commitlint
+          --from ${{ github.event.pull_request.base.sha }}
+          --to ${{ github.event.pull_request.head.sha }}
+          --verbose
 
   # Lint the workflows themselves; until a stack exists they are most of the
   # code in this repo, and agents edit them.
