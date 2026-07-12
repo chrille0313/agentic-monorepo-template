@@ -11,6 +11,15 @@ Run `/setup-stack` to scaffold the project and fill in the command contract in C
 - **Acceptance criteria:** Every command-contract entry in CLAUDE.md is a real, runnable command; each runs green on a fresh clone.
 - **Out of scope:** Any feature work.
 
+## Set up releases and deploys
+
+Blocked by: Set up the stack.
+
+Set up releases and deploys for the chosen stack (what done looks like: /setup-stack step 5).
+
+- **Acceptance criteria:** Each releasable app/package can be released on its own with tooling that fits the stack; releases collect the user-facing notes shipped with merged PRs into the release notes, rather than reformatting the commit log; each deployable app has its own deploy workflow with an appropriate trigger.
+- **Out of scope:** Provisioning cloud infrastructure or accounts.
+
 ## Done
 
 <!-- - ~~Task name~~ (#PR) -->
