@@ -24,14 +24,16 @@ Plan a feature once, then let the pipeline carry it: a **PM agent** triages the 
 
 ```mermaid
 flowchart LR
-    backlog[("Backlog<br>issues /<br>BACKLOG.md")] --> pm["PM agent<br>triage · pick one · spec"]
-    pm -- "task spec" --> impl
+    subgraph outer ["Outer loop &nbsp;·&nbsp; orchestrate"]
+        backlog[("Backlog")] --> pm["PM agent<br>triage · pick one · spec"]
+    end
 
     subgraph inner ["Inner loop &nbsp;·&nbsp; max 3 rounds"]
         impl["Implementer"] -- "diff" --> rev["Reviewer<br>(fresh context)"]
         rev -. "blocking findings" .-> impl
     end
 
+    pm -- "task spec" --> impl
     rev -- "APPROVE" --> pr["PR + evidence"] --> gate{{"Human<br>merge gate"}}
     gate -- "merge" --> backlog
 ```
