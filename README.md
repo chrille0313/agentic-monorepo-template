@@ -54,18 +54,24 @@ Humans stay at the merge gate. Agents never merge to `main`.
   skills/          /build (inner loop), /pm (outer loop), /setup-stack (one-time adapt)
   workflows/       feature-loop.js — deterministic scripted variant of the inner loop
   settings.json    pre-approved read-only permissions
-.github/workflows/ agent-task.yml (label-triggered), pm-cron.yml (scheduled PM)
+.github/workflows/ ci.yml (deterministic gates + security scan), agent-task.yml
+                   (label-triggered inner loop), pm-cron.yml (scheduled PM)
+docs/DESIGN.md     the research-backed rationale for every design choice
 BACKLOG.md         local backlog fallback when GitHub Issues aren't available
 CLAUDE.md          conventions + the command contract every agent relies on
 ```
 
-## Safety rails (deliberate design choices)
+## Safety rails (deliberate, evidence-backed design choices)
 
-- **Fresh-context review.** The reviewer never sees the implementer's reasoning — only the spec and the diff. That's what makes the review adversarial rather than confirmatory.
-- **Iteration cap.** The inner loop stops after 3 rounds and escalates to a human instead of thrashing.
-- **Human merge gate.** Agents open PRs; only humans merge. Branch protection on `main` is strongly recommended.
-- **Command contract.** Agents verify with the *same* commands CI runs (`check`, `test`, `build` in CLAUDE.md), so "reviewer approved" means something.
-- **Spec-driven.** Nothing is implemented without acceptance criteria. Vague requests get shaped by the PM agent first.
+See [docs/DESIGN.md](docs/DESIGN.md) for the research behind each of these.
+
+- **Deterministic gates beneath review.** Check/test/build run in CI on every PR and must be green before a review round even starts — agent review layers on top of machinery that can't be talked past.
+- **Grounded review.** The reviewer sees only the spec and the diff (never the implementer's reasoning), and a blocking finding requires evidence it *executed* — a failing command, a reproduced wrong output. Agents verify behavior through the contract's `run`/`smoke` path, not just compilation.
+- **Bounded loops at three levels.** 3 implement→review rounds max, with a no-progress early exit; `--max-turns` caps any single agent; `--max-budget-usd` caps CI spend.
+- **No consensus-seeking.** Disputed findings go to an independent judge (or the human, locally) — implementer and reviewer never negotiate each other into agreement.
+- **Informed human merge gate.** Agents open PRs carrying criteria mapping, severity-ranked findings, and executed verification evidence; only humans merge. Branch protection on `main` is strongly recommended.
+- **Spec-driven.** Nothing is implemented without acceptance criteria; the PM decomposes anything too big for one PR.
+- **Tests are a floor.** An independent security scan runs in CI, and the reviewer explicitly judges whether the tests themselves are meaningful.
 
 ## Adapting the template
 

@@ -5,12 +5,18 @@ This repo is agentic-first: features flow through a PM → implementer → revie
 ## Command contract
 
 <!-- Filled in by /setup-stack. Every agent verifies work with these exact commands;
-     CI runs the same ones. Keep them fast and deterministic. -->
+     CI (.github/workflows/ci.yml) runs the same ones. Keep them fast and deterministic. -->
 
 - **Check** (lint + typecheck): `TODO — run /setup-stack`
 - **Test**: `TODO — run /setup-stack`
 - **Build**: `TODO — run /setup-stack`
-- **Dev server** (optional): `TODO — run /setup-stack`
+- **Run** (start the app so an agent can exercise it — stable port/URL or CLI entrypoint): `TODO — run /setup-stack`
+- **Smoke** (drive the *running* app end-to-end; deterministic, seeded): `TODO — run /setup-stack`
+
+Check, test, and build are hard gates: they must exit 0 before agent review means
+anything — review layers on top of deterministic checks, never replaces them.
+Run + smoke exist so agents can verify *behavior*, not just code: this repo treats
+"an agent can start and exercise the app" as a first-class requirement of the stack.
 
 If a contract command is still `TODO`, say so and stop — do not invent a substitute.
 
@@ -28,3 +34,5 @@ If a contract command is still `TODO`, say so and stop — do not invent a subst
 - The inner loop is capped at 3 implement→review rounds. If the reviewer still requests changes, stop and escalate to a human with the unresolved findings.
 - Implementers implement the spec, not more. Scope creep is a review finding.
 - Reviewers judge only the spec and the diff — fresh context is the point. Never ask the implementer to explain; if it needs explaining, that's a finding.
+- Verification is executed, not argued: any claim about behavior is backed by a command that actually ran (a test, a smoke check, a reproduced output).
+- Agent prompts state outcomes and constraints, not step-by-step procedures. Keep them short; trust the model.

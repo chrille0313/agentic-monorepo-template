@@ -43,8 +43,10 @@ jobs:
           prompt: |
             Run the /build skill for issue #${{ github.event.issue.number }}.
             This is a headless run: when the reviewer approves, push the task
-            branch and open a PR (body: summary + "Closes #${{ github.event.issue.number }}"),
-            then comment the PR link on the issue. If the loop escalates instead,
+            branch and open a PR ("Closes #${{ github.event.issue.number }}" plus
+            the evidence the /build skill requires: criteria mapping, severity-
+            ranked review findings, and executed verification results), then
+            comment the PR link on the issue. If the loop escalates instead,
             comment the unresolved findings on the issue and remove the `agent`
             label so a human can take over.
-          claude_args: '--max-turns 150'
+          claude_args: '--max-turns 150 --max-budget-usd 15'
