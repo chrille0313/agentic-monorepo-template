@@ -38,8 +38,8 @@ flowchart LR
     gate -- "merge" --> backlog
 ```
 
-- **Inner loop** (evaluator-optimizer): the boxed cycle. The implementer builds against a task spec, then a reviewer with completely fresh context judges the diff, grounded in commands it actually ran. Findings cycle back until approval, an iteration cap, or a no-progress exit.
-- **Outer loop** (orchestrator-workers): the full circuit. The PM owns the backlog: it triages, unblocks, picks the most valuable ready item, shapes the spec, and dispatches it into the inner loop. A merge closes the circle.
+- **Inner loop** (evaluator-optimizer): the implement/review cycle. The implementer builds against a task spec, then a reviewer with completely fresh context judges the diff, grounded in commands it actually ran. Findings cycle back until approval, an iteration cap, or a no-progress exit.
+- **Outer loop** (orchestrator-workers): the full circuit around it. The PM owns the backlog: it triages, unblocks, picks the most valuable ready item, shapes the spec, and dispatches it into the inner loop. A merge closes the circle.
 
 > [!IMPORTANT]
 > Agents never merge. Every PR arrives carrying its evidence (criteria mapping, review history, executed verification), and a human holds the merge gate. Enable branch protection on `main` before turning on the autonomous modes.
