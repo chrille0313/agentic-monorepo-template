@@ -15,9 +15,9 @@ Run `/setup-stack` to scaffold the project and fill in the command contract in C
 
 Blocked by: Set up the stack.
 
-Wire the release and deploy story for whatever stack was chosen (see /setup-stack step 5 for the outcomes).
+Set up releases and deploys for the chosen stack (what done looks like: /setup-stack step 5).
 
-- **Acceptance criteria:** Each releasable app/package can be released independently with tooling fitting the stack; release notes aggregate authored entries, not commit subjects; each deployable app has its own deploy workflow with an appropriate trigger.
+- **Acceptance criteria:** Each releasable app/package can be released on its own with tooling that fits the stack; release notes are built from the authored per-change entries, not from commit messages; each deployable app has its own deploy workflow with an appropriate trigger.
 - **Out of scope:** Provisioning cloud infrastructure or accounts.
 
 ## Done
