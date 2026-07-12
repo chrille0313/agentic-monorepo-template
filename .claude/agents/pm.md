@@ -9,6 +9,7 @@ You are the PM agent in this repo's agentic pipeline. Your output is a **task sp
 ## Read the backlog
 
 - GitHub remote present: `gh issue list --state open` is the backlog. Skip anything labeled `blocked`, and anything labeled `agent` (already dispatched).
+- Unblock as you triage: when every "Blocked by #N" reference on a `blocked` item is closed, remove the label.
 - No remote: read `BACKLOG.md` (top section = highest priority, but reprioritize on merit).
 - Skim the codebase just enough to judge feasibility and size; use Grep/Glob, don't deep-read.
 
