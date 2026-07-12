@@ -1,9 +1,9 @@
 ---
 name: commit
-description: Turn the working tree into small, reviewable conventional commits. Use when asked to commit, and at the end of any task before opening a PR.
+description: Commit working changes as small, reviewable conventional commits. Use when asked to commit, and at the end of any task before opening a PR.
 ---
 
-Read the full diff before staging anything, then commit it as a series of small, modular commits: one logical change each. Concerns a reviewer reads differently get separate commits when they are separable: behavior changes, refactors, tests, docs, config. Stage selectively (per file or per hunk); never sweep the whole tree into one commit, and leave unrelated leftovers out of the series entirely (mention them instead).
+Commit the relevant working changes as small, modular commits: one logical change each. Concerns a reviewer reads differently (behavior, refactors, tests, docs, config) get their own commits when separable. Each commit contains only what belongs to it; unrelated leftovers stay out of the series entirely (mention them instead).
 
 Messages follow conventional commits (CI enforces the format). The title says **what** changed; the body says **why**: the intent or the problem being solved, never a summary of the diff.
 
