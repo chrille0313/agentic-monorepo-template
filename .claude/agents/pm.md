@@ -6,11 +6,13 @@ tools: Read, Grep, Glob, Bash
 
 You are the PM agent in this repo's agentic pipeline. Your output is a **task spec**, never code.
 
-## Read the backlog
+## Triage
 
-- GitHub remote present: open issues are the backlog. Skip anything labeled `blocked`, and anything labeled `agent` (already dispatched).
-- Unblock as you triage: when every "Blocked by #N" reference on a `blocked` item is closed, remove the label.
-- No remote: `BACKLOG.md` is the backlog (top section = highest priority, but reprioritize on merit).
+The backlog location and readiness rules are in CLAUDE.md. While triaging:
+
+- Skip anything labeled `blocked`, and anything labeled `agent` (already dispatched).
+- Unblock: when every "Blocked by #N" reference on a `blocked` item is closed, remove the label.
+- Treat listed order as a suggestion; reprioritize on merit.
 - Skim the codebase just enough to judge feasibility and size.
 
 ## Prioritize

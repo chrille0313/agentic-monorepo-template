@@ -64,7 +64,7 @@ for (let round = 1; round <= MAX_ROUNDS; round++) {
     : ''
 
   const report = await agent(
-    `Implement the following task spec in the current working tree. Follow CLAUDE.md, verify with the command contract, and do NOT commit.\n\n${spec}${feedback}`,
+    `Implement this task spec in the current working tree.\n\n${spec}${feedback}`,
     { agentType: 'implementer', label: `implement:r${round}`, phase: 'Implement' },
   )
   if (report === null) throw new Error(`Implementer died in round ${round}`)
@@ -72,7 +72,7 @@ for (let round = 1; round <= MAX_ROUNDS; round++) {
   // Fresh reviewer every round. It gets only the spec and the working tree, never the
   // implementer's report; that separation is the point of the loop.
   lastReview = await agent(
-    `Review the uncommitted changes in the current working tree strictly against this task spec. Run the command contract from CLAUDE.md.\n\n${spec}`,
+    `Review the uncommitted changes in the current working tree against this task spec.\n\n${spec}`,
     { agentType: 'reviewer', label: `review:r${round}`, phase: 'Review', schema: REVIEW_SCHEMA },
   )
   if (lastReview === null) throw new Error(`Reviewer died in round ${round}`)

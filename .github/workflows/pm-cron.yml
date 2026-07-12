@@ -28,9 +28,5 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
-            Run the /pm skill with --dispatch. Remember: dispatch at most one
-            issue, and none if an `agent`-labeled issue is already open. Before
-            dispatching, verify the issue and its spec are consistent; a bad
-            spec cascades through every downstream agent. If the backlog has
-            no ready items, just report that.
+            Run the /pm skill with --dispatch.
           claude_args: '--max-turns 50'
