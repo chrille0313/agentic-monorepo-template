@@ -34,6 +34,7 @@ Humans stay at the merge gate. Agents never merge to `main`.
 
 | Command | What it does |
 |---|---|
+| `/plan <feature>` | Interactive planning interview, then fans the approved plan out into spec-formatted, dependency-ordered issues |
 | `/build <description or issue #>` | Runs the inner loop on one task, with you at the merge gate |
 | `/pm` | Runs the outer loop once: triage backlog, pick the next item, spec it, offer to build |
 | `/pm --dispatch` | Same, but dispatches by labeling the issue `agent` (triggers CI) |
@@ -53,7 +54,8 @@ apps/              deployable applications, one directory per app (filled by /se
 packages/          shared libraries used by apps
 .claude/
   agents/          pm, implementer, reviewer: the actors, each with its own context and tools
-  skills/          /build (inner loop), /pm (outer loop), /setup-stack (one-time adapt)
+  skills/          /plan (idea to issues), /build (inner loop), /pm (outer loop),
+                   /setup-stack (one-time adapt)
   workflows/       feature-loop.js, a deterministic scripted variant of the inner loop
   settings.json    pre-approved read-only permissions
 .github/workflows/ ci.yml (contract gates, commit lint, workflow lint, security
