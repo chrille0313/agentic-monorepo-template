@@ -79,7 +79,7 @@ packages/          shared libraries used by apps
 .claude/
   agents/          pm, implementer, reviewer: the actors, each with its own context and tools
   skills/          /plan (idea to issues), /build (inner loop), /pm (outer loop),
-                   /setup-stack (one-time adapt)
+                   /commit (small modular commits), /setup-stack (one-time adapt)
   workflows/       feature-loop.js, a deterministic scripted variant of the inner loop
 .github/workflows/ ci.yml (contract gates, commit lint, workflow lint, security scan),
                    agent-task.yml (label-triggered inner loop), pm-cron.yml (scheduled PM)
