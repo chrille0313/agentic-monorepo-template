@@ -1,0 +1,31 @@
+# Dependabot keeps two things fresh:
+#   1. GitHub Actions: active from day one. Updates the SHA-pinned `uses:` lines
+#      (and their version comments), so pinning stays secure without going stale.
+#   2. Package dependencies: wired by /setup-stack once a stack exists; a
+#      commented example is below.
+#
+# Updates are grouped to cut PR noise and to keep related packages moving
+# together; lone bumps within a framework family are a common way to break
+# the build.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns:
+          - "*"
+
+  # Wired by /setup-stack for the chosen stack. Example for an npm/pnpm workspace
+  # (other ecosystems: cargo, pip, uv, gomod, maven, ...):
+  # - package-ecosystem: npm
+  #   directory: /
+  #   schedule:
+  #     interval: weekly
+  #   groups:
+  #     minor-and-patch:
+  #       update-types:
+  #         - minor
+  #         - patch

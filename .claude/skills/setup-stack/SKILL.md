@@ -26,7 +26,7 @@ Both must be reliable enough that red means "the app is broken", never "the harn
 
 ## 4. Fill the command contract
 
-Replace every `TODO` in CLAUDE.md's command-contract section with real commands, and wire check/test/build into the `gates` job of `.github/workflows/ci.yml`. Then **verify each entry by running it**; a command that hasn't run green doesn't go in. Fast and deterministic beats thorough here, because these run on every inner-loop round.
+Replace every `TODO` in CLAUDE.md's command-contract section with real commands, and wire check/test/build into the `gates` job of `.github/workflows/ci.yml`. Also add the stack's package ecosystem to `.github/dependabot.yml` (a commented example is there; keep updates grouped). Then **verify each contract entry by running it**; a command that hasn't run green doesn't go in. Fast and deterministic beats thorough here, because these run on every inner-loop round.
 
 ## 5. Finish
 
