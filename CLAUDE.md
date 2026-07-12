@@ -20,6 +20,14 @@ Run and smoke exist so agents can verify *behavior*, not just code: this repo tr
 
 If a contract command is still `TODO`, say so and stop. Do not invent a substitute.
 
+## Layout
+
+This is a monorepo with a fixed structure, independent of stack and tooling:
+
+- `apps/<name>`: deployable applications. Every deployable lives here, even when there is only one.
+- `packages/<name>`: shared libraries used by apps.
+- Group feature code by domain (vertical slices), not by technology.
+
 ## Backlog
 
 - If the repo has a GitHub remote, **GitHub Issues are the backlog**. Use `gh issue list/view`.
