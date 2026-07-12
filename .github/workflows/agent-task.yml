@@ -2,9 +2,14 @@
 # in CI, opening a PR when the reviewer approves.
 #
 # Setup:
-#   1. Repo secret ANTHROPIC_API_KEY (Settings → Secrets → Actions)
+#   1. Add ONE auth secret (Settings -> Secrets -> Actions):
+#      - CLAUDE_CODE_OAUTH_TOKEN (preferred): bills your Pro/Max subscription.
+#        Generate with `claude setup-token` (valid about a year). Note that CI
+#        runs then share your plan's usage limits with your interactive use.
+#      - ANTHROPIC_API_KEY: pay-per-token API billing. The better choice for
+#        shared/team automation.
 #   2. Create the `agent` label
-#   3. Allow Actions to create PRs: Settings → Actions → General →
+#   3. Allow Actions to create PRs: Settings -> Actions -> General ->
 #      "Allow GitHub Actions to create and approve pull requests"
 name: Agent task
 
@@ -39,6 +44,8 @@ jobs:
 
       - uses: anthropics/claude-code-action@v1
         with:
+          # Set one of these secrets; the subscription token is preferred.
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
             Run the /build skill for issue #${{ github.event.issue.number }}.

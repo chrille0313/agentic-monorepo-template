@@ -42,7 +42,7 @@ Humans stay at the merge gate. Agents never merge to `main`.
 
 **Local (interactive).** `/build` and `/pm` in a Claude Code session. You approve the final commit/PR.
 
-**GitHub Actions (event-driven).** Label any issue `agent` and [agent-task.yml](.github/workflows/agent-task.yml) runs the full inner loop headlessly, opening a PR that references the issue. Requires the `ANTHROPIC_API_KEY` repo secret.
+**GitHub Actions (event-driven).** Label any issue `agent` and [agent-task.yml](.github/workflows/agent-task.yml) runs the full inner loop headlessly, opening a PR that references the issue. Requires one auth secret: `CLAUDE_CODE_OAUTH_TOKEN` to bill your Pro/Max subscription (generate with `claude setup-token`), or `ANTHROPIC_API_KEY` for pay-per-token API billing. Prefer the subscription token for personal repos; note it shares your plan's usage limits.
 
 **Scheduled PM (autonomous).** [pm-cron.yml](.github/workflows/pm-cron.yml) runs the PM agent on a schedule: it triages the backlog, picks one ready issue, refreshes its spec, and labels it `agent`, which triggers the event-driven mode. Disabled by default; uncomment the `schedule` block to enable.
 

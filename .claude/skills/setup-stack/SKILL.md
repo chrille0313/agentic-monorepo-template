@@ -32,4 +32,4 @@ Replace every `TODO` in CLAUDE.md's command-contract section with real commands,
 
 - Update the README title/intro to name the project (keep the loop documentation).
 - Mark the "Set up the stack" task done in BACKLOG.md (or close the issue).
-- Suggest next steps: add branch protection on `main`, set the `ANTHROPIC_API_KEY` repo secret and create the `agent` label if they want the CI modes, then `/pm` or `/build` to start the loop.
+- Suggest next steps: add branch protection on `main`; if they want the CI modes, add an auth secret (`CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token` to bill their subscription, or `ANTHROPIC_API_KEY`) and create the `agent` label; then `/pm` or `/build` to start the loop.
