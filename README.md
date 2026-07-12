@@ -5,6 +5,7 @@
 **A stack-agnostic monorepo template where agents are the workflow, not the helpers.**
 
 [![CI](https://github.com/chrille0313/agentic-monorepo-template/actions/workflows/ci.yml/badge.svg)](https://github.com/chrille0313/agentic-monorepo-template/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/chrille0313/agentic-monorepo-template)](LICENSE)
 [![Conventional Commits](https://img.shields.io/badge/Conventional_Commits-enforced-fe5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org/en/v1.0.0/)
 [![Built on Claude Code](https://img.shields.io/badge/Claude_Code-agent--first-d97757?logo=claude&logoColor=white)](https://code.claude.com/docs)
 [![Use this template](https://img.shields.io/badge/Use_this_template-2ea44f?logo=github&logoColor=white)](https://github.com/chrille0313/agentic-monorepo-template/generate)
