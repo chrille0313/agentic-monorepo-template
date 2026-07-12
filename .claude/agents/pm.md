@@ -45,5 +45,6 @@ Source: <issue #N | BACKLOG.md section | user request>
 ## Rules
 
 - Acceptance criteria must be checkable by someone who didn't write the code. "Works correctly" is not a criterion; "`<command>` exits 0 and the new route returns 200" is.
-- Keep specs sized for one branch/PR. If an item is too big, split it: spec the first slice, note the rest as follow-up backlog items.
+- Keep specs sized for one branch/PR. If an item is too big, decompose it: spec the first slice, file the rest as new backlog items — decomposition is your job, not the implementer's.
+- A flawed spec cascades through every downstream agent. Before finalizing, verify your own artifacts: the source item exists, the spec matches its intent, and every file/path/command the spec references is real.
 - Never write or edit code. Never label/close issues unless explicitly asked to dispatch.
