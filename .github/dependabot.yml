@@ -13,6 +13,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Wait before adopting fresh releases; compromised versions are usually
+    # yanked within days of publication.
+    cooldown:
+      default-days: 7
     groups:
       actions:
         patterns:
@@ -24,6 +28,8 @@ updates:
   #   directory: /
   #   schedule:
   #     interval: weekly
+  #   cooldown:
+  #     default-days: 7
   #   groups:
   #     minor-and-patch:
   #       update-types:
