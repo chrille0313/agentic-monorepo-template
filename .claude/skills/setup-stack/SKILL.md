@@ -33,7 +33,7 @@ Replace every `TODO` in CLAUDE.md's command-contract section with real commands,
 Releasing (versioning, notes, tags) and deploying (shipping an app somewhere) are separate lifecycles; set them up separately. Do this now if the stack makes it cheap, otherwise leave it to the "Set up releases and deploys" backlog item for when there is something to release. What done looks like:
 
 - Each releasable app/package can be versioned and released on its own, with tooling that fits the stack (changesets, release-please manifest mode, release-plz, ...).
-- Release notes are built from the authored per-change entries (a CLAUDE.md convention), not from commit messages.
+- Releasing collects the user-facing notes PRs ship with (a CLAUDE.md convention) into the release notes, so pick tooling with a place for such notes and wire up what "a note" concretely is (a changeset file, a changelog fragment, ...). The commit log never becomes release notes.
 - Each deployable app has its own deploy workflow with its own trigger and steps (cloud deploy, package publish, docs site, ...).
 - Any new action is pinned to a full commit SHA.
 

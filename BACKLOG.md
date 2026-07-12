@@ -17,7 +17,7 @@ Blocked by: Set up the stack.
 
 Set up releases and deploys for the chosen stack (what done looks like: /setup-stack step 5).
 
-- **Acceptance criteria:** Each releasable app/package can be released on its own with tooling that fits the stack; release notes are built from the authored per-change entries, not from commit messages; each deployable app has its own deploy workflow with an appropriate trigger.
+- **Acceptance criteria:** Each releasable app/package can be released on its own with tooling that fits the stack; releases collect the user-facing notes shipped with merged PRs into the release notes, rather than reformatting the commit log; each deployable app has its own deploy workflow with an appropriate trigger.
 - **Out of scope:** Provisioning cloud infrastructure or accounts.
 
 ## Done

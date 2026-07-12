@@ -40,6 +40,6 @@ This is a monorepo with a fixed structure, independent of stack and tooling:
 - Work happens on branches, never directly on `main`. Agents open PRs; humans merge.
 - One task = one branch = one PR. Branch names: `agent/<short-slug>`.
 - Conventional commits (`feat:`, `fix:`, `chore:`, ...), enforced by the `commits` job in CI.
-- Commit messages are for developers; release notes are for users. Every user-facing change includes its own short release-note entry (the spec's Goal section is good raw material), and releases are assembled from those entries, never from commit messages.
+- Commit messages are for developers; release notes are for users. A PR that changes user-facing behavior also includes a short note written for users, in whatever form the release tooling collects (changeset file, fragment, ...); the spec's Goal section is good raw material. Release notes are those collected notes, never the commit log.
 - Verification is executed, not argued: any claim about behavior is backed by a command that actually ran (a test, a smoke check, a reproduced output).
 - Agent prompts state outcomes and constraints, not step-by-step procedures. Keep them short; trust the model. One owner per rule: repo-wide conventions live here, an agent's behavior lives in its agent file, orchestration lives in the skill that runs it.
