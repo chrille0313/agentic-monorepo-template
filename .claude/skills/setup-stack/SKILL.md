@@ -9,7 +9,7 @@ This template is stack-agnostic on purpose: the agentic loop only needs the **co
 
 ## 1. Choose
 
-Ask the user (AskUserQuestion) for their stack (language/framework, package manager, test runner) unless they already said. Offer sensible bundles (e.g. "TypeScript + Vite + Vitest", "Python + uv + pytest", "Go + std tooling") but accept anything.
+Establish the stack with the user (language/framework, package manager, test runner) unless they already said. Offer sensible bundles (e.g. "TypeScript + Vite + Vitest", "Python + uv + pytest", "Go + std tooling") but accept anything.
 
 ## 2. Scaffold minimally
 
