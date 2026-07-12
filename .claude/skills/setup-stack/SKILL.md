@@ -28,7 +28,16 @@ Both must be reliable enough that red means "the app is broken", never "the harn
 
 Replace every `TODO` in CLAUDE.md's command-contract section with real commands, and wire check/test/build into the `gates` job of `.github/workflows/ci.yml`. Also add the stack's package ecosystem to `.github/dependabot.yml` if it introduces one that isn't covered (npm is already active for the repo's toolchain; keep updates grouped). Then **verify each contract entry by running it**; a command that hasn't run green doesn't go in. Fast and deterministic beats thorough here, because these run on every inner-loop round.
 
-## 5. Finish
+## 5. Releases and deploys
+
+Releasing (versioning, notes, tags) and deploying (shipping an app somewhere) are different lifecycles; neither is generated from commit history. Outcomes to wire, now if the stack makes it cheap, otherwise as the "Set up releases and deploys" backlog item once there is something to release:
+
+- Each releasable app/package versions and releases independently, with tooling that fits the stack (changesets, release-please manifest mode, release-plz, ...).
+- Release notes aggregate the authored per-change entries required by CLAUDE.md; commit subjects never become release notes.
+- Each deployable app gets its own deploy workflow with its own trigger and steps (cloud deploy, package publish, docs site, ...).
+- Any new action is pinned to a full commit SHA.
+
+## 6. Finish
 
 - Update the README title/intro to name the project (keep the loop documentation).
 - Mark the "Set up the stack" task done in BACKLOG.md (or close the issue).
