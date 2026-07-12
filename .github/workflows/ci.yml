@@ -1,6 +1,6 @@
 # The deterministic gate: the same command contract agents verify with locally,
 # enforced on every PR by machinery that cannot be talked past. Agent review
-# layers on top of this — it never substitutes for it.
+# layers on top of this; it never substitutes for it.
 name: CI
 
 on:
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Wired by /setup-stack — one step per command-contract entry, e.g.:
+      # Wired by /setup-stack, one step per command-contract entry, e.g.:
       # - uses: actions/setup-node@v4
       #   with: { node-version: 24 }
       # - run: npm ci
@@ -28,7 +28,7 @@ jobs:
       - name: Contract not wired yet
         run: echo "Run /setup-stack to wire the command contract into this job."
 
-  # Unit tests are a floor, not a verdict — a large share of functionally-correct
+  # Unit tests are a floor, not a verdict: a large share of functionally-correct
   # AI-generated code still introduces security vulnerabilities. Scan independently.
   security:
     runs-on: ubuntu-latest

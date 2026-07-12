@@ -1,13 +1,13 @@
 ---
 name: build
-description: Run the inner agentic loop on one task — implementer builds, fresh-context reviewer judges, findings cycle back until approval (max 3 rounds). Use when the user says "build X", "implement issue #N", "work on the next backlog item", or CI dispatches a labeled issue.
+description: Run the inner agentic loop on one task. The implementer builds, a fresh-context reviewer judges, and findings cycle back until approval (max 3 rounds). Use when the user says "build X", "implement issue #N", "work on the next backlog item", or CI dispatches a labeled issue.
 ---
 
-# /build — the inner loop (evaluator–optimizer)
+# /build: the inner loop (evaluator-optimizer)
 
-Input: `$ARGUMENTS` — an issue number, a task description, or empty (= next ready backlog item).
+Input (`$ARGUMENTS`): an issue number, a task description, or empty (meaning the next ready backlog item).
 
-You are the **loop controller**. You do not implement or review yourself — you dispatch the `implementer` and `reviewer` subagents, route the verdict, and own git state.
+You are the **loop controller**. You do not implement or review yourself; you dispatch the `implementer` and `reviewer` subagents, route the verdict, and own git state.
 
 ## 1. Resolve the spec
 
@@ -23,15 +23,15 @@ If not already on a task branch/worktree: create branch `agent/<short-slug>` (wo
 
 Round N:
 
-1. **Implement** — spawn the `implementer` agent with the full spec text. On round 2+, message the *same* implementer (it has the context) with the reviewer's blocking findings verbatim.
+1. **Implement**: spawn the `implementer` agent with the full spec text. On round 2+, message the *same* implementer (it has the context) with the reviewer's blocking findings verbatim.
 2. Sanity-check its report: if `STATUS: BLOCKED`, stop and surface it to the user.
-3. **Gate** — a review round only starts once check/test/build pass; red gates go straight back to the implementer without consuming a round.
-4. **Review** — spawn a **fresh** `reviewer` agent each round (never reuse; fresh context is the point). Give it only: the spec, the branch/diff reference, and the round number. Never forward the implementer's report or reasoning.
+3. **Gate**: a review round only starts once check/test/build pass; red gates go straight back to the implementer without consuming a round.
+4. **Review**: spawn a **fresh** `reviewer` agent each round (never reuse; fresh context is the point). Give it only the spec, the branch/diff reference, and the round number. Never forward the implementer's report or reasoning.
 5. Route the verdict:
    - `APPROVE` → exit loop to step 4.
    - `REQUEST_CHANGES` → next round with the blocking findings.
-   - **No-progress exit**: if the round produced the same blocking findings as the previous one, or the diff didn't change, stop early and escalate — more rounds provably won't help.
-   - **Disputed finding**: if the implementer disputed a finding with evidence and a reviewer restates it — interactive: surface the disagreement to the user; headless: spawn a fresh judge agent (general-purpose) with only the spec, the finding, and both sides' evidence; its ruling on that finding is final. Never let implementer and reviewer negotiate to consensus.
+   - **No-progress exit**: if the round produced the same blocking findings as the previous one, or the diff didn't change, stop early and escalate; more rounds provably won't help.
+   - **Disputed finding**: when the implementer disputed a finding with evidence and a reviewer restates it, surface the disagreement to the user if interactive. If headless, spawn a fresh judge agent (general-purpose) with only the spec, the finding, and both sides' evidence; its ruling on that finding is final. Never let the implementer and reviewer negotiate to consensus.
    - After round 3 still not approved → **stop and escalate**: present the spec, what was built, and the unresolved findings. Do not keep looping; do not merge anything.
 
 ## 4. On approval

@@ -1,5 +1,5 @@
 # Outer loop, autonomous: on a schedule, the PM agent triages the backlog,
-# picks ONE ready issue, refreshes its spec, and labels it `agent` — which
+# picks ONE ready issue, refreshes its spec, and labels it `agent`, which
 # triggers agent-task.yml. Humans still hold the merge gate.
 #
 # Disabled by default: uncomment the `schedule` block to enable. Requires the
@@ -24,11 +24,13 @@ jobs:
 
       - uses: anthropics/claude-code-action@v1
         with:
+          # Set one of these secrets; the subscription token is preferred.
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
             Run the /pm skill with --dispatch. Remember: dispatch at most one
             issue, and none if an `agent`-labeled issue is already open. Before
-            dispatching, verify the issue and its spec are consistent — a bad
+            dispatching, verify the issue and its spec are consistent; a bad
             spec cascades through every downstream agent. If the backlog has
             no ready items, just report that.
-          claude_args: '--max-turns 50 --max-budget-usd 5'
+          claude_args: '--max-turns 50'
