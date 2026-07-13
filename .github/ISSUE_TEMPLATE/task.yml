@@ -1,0 +1,33 @@
+# Mirrors the task-spec format owned by .claude/agents/pm.md. An issue filed
+# through this form arrives loop-ready; the PM only fills gaps instead of
+# reshaping free text. Keep the two in sync.
+name: Task
+description: A unit of work for the agent pipeline. A complete form makes the issue build-ready.
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What changes for the user or system, and why now. 1-3 sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: Observable, testable statements, each one independently checkable by someone who didn't write the code.
+      placeholder: |
+        - [ ] `pnpm test` exits 0 and covers the new behavior
+        - [ ] The new route returns 200 for a signed-in user
+    validations:
+      required: true
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+      description: Adjacent things explicitly NOT to do. Keeps the task sized for one branch/PR.
+  - type: textarea
+    id: verification-plan
+    attributes:
+      label: Verification plan
+      description: How a reviewer proves the criteria. Which command-contract commands, plus any manual or behavioral check.
