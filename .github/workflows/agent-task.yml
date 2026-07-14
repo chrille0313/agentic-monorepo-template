@@ -1,16 +1,17 @@
 # Inner loop, headless: label an issue `agent` and the implement→review loop runs
 # in CI, opening a PR when the reviewer approves.
 #
-# Setup:
+# Setup (the auth secret is the only manual step; /setup-stack does the rest):
 #   1. Add ONE auth secret (Settings -> Secrets -> Actions):
 #      - CLAUDE_CODE_OAUTH_TOKEN (preferred): bills your Pro/Max subscription.
 #        Generate with `claude setup-token` (valid about a year). Note that CI
 #        runs then share your plan's usage limits with your interactive use.
 #      - ANTHROPIC_API_KEY: pay-per-token API billing. The better choice for
 #        shared/team automation.
-#   2. Create the `agent` label
+#   2. Create the `agent` label (done by /setup-stack)
 #   3. Allow Actions to create PRs: Settings -> Actions -> General ->
 #      "Allow GitHub Actions to create and approve pull requests"
+#      (done by /setup-stack)
 name: Agent task
 
 on:

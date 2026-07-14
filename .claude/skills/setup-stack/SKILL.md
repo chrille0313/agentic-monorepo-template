@@ -37,8 +37,17 @@ Releasing (versioning, notes, tags) and deploying (shipping an app somewhere) ar
 - Each deployable app has its own deploy workflow with its own trigger and steps (cloud deploy, package publish, docs site, ...).
 - Any new action is pinned to a full commit SHA.
 
-## 6. Finish
+## 6. Configure the repo on GitHub
+
+Skip if the repo has no GitHub remote. All of this is `gh` work:
+
+- Protect the default branch with a **ruleset** (rulesets, not classic branch protection): pull requests required before merging, the ci.yml jobs required to pass, force pushes and branch deletion blocked. This turns the "agents open PRs; humans merge" convention into something enforced. (GitHub doesn't enforce rulesets on free-plan private repos; if that applies, say so and move on.)
+- Create the `agent` label and allow GitHub Actions to create pull requests, so the headless loop (agent-task.yml) can run.
+
+The auth secret for the CI modes stays manual: the user adds `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`, billing their subscription) or `ANTHROPIC_API_KEY` themselves.
+
+## 7. Finish
 
 - Update the README title/intro to name the project (keep the loop documentation).
 - Mark the "Set up the stack" task done in BACKLOG.md (or close the issue).
-- Suggest next steps: add branch protection on `main`; if they want the CI modes, add an auth secret (`CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token` to bill their subscription, or `ANTHROPIC_API_KEY`) and create the `agent` label; then `/pm` or `/build` to start the loop.
+- Suggest next steps: add the auth secret if they want the CI modes, then `/pm` or `/build` to start the loop.
