@@ -41,7 +41,8 @@ Releasing (versioning, notes, tags) and deploying (shipping an app somewhere) ar
 
 Skip if the repo has no GitHub remote. All of this is `gh` work:
 
-- Protect the default branch with a **ruleset** (rulesets, not classic branch protection): pull requests required before merging, the ci.yml jobs required to pass, force pushes and branch deletion blocked. This turns the "agents open PRs; humans merge" convention into something enforced. (GitHub doesn't enforce rulesets on free-plan private repos; if that applies, say so and move on.)
+- Protect the default branch with a **ruleset** (rulesets, not classic branch protection): pull requests required before merging with review threads resolved, the ci.yml jobs required to pass and pinned to the GitHub Actions integration (so only real workflow runs can satisfy them), force pushes and branch deletion blocked. Require an approving review when more than one human maintains the repo. This turns the "agents open PRs; humans merge" convention into something enforced. (GitHub doesn't enforce rulesets on free-plan private repos; if that applies, say so and move on.)
+- Add a **tag ruleset** making all tags immutable: creation stays open for release tooling; moving or deleting a tag is blocked.
 - Create the `agent` label and allow GitHub Actions to create pull requests, so the headless loop (agent-task.yml) can run.
 
 The auth secret for the CI modes stays manual: the user adds `CLAUDE_CODE_OAUTH_TOKEN` (from `claude setup-token`, billing their subscription) or `ANTHROPIC_API_KEY` themselves.
