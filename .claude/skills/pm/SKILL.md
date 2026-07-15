@@ -18,6 +18,6 @@ Relay to the user: the pick and why, the spec, plus a short health note (e.g. "3
 ## 3. Hand off
 
 - **Without `--dispatch`** (interactive): ask the user whether to run `/build` on the spec now. If yes, invoke the build skill with the spec.
-- **With `--dispatch`** (autonomous/CI): post the spec as a comment on the chosen issue, then add the `agent` label, which triggers `.github/workflows/agent-task.yml` to run the inner loop headlessly. Dispatch at most ONE issue per run, and skip dispatching entirely if an `agent`-labeled issue is already open (one task in flight at a time).
+- **With `--dispatch`** (autonomous/CI): post the spec as a comment on the chosen issue, then add the `agent` label, which triggers `.github/workflows/agent-task.yml` to run the inner loop headlessly. Independent tasks run in parallel: after dispatching, repeat the triage while ready items remain that are independent of everything now in flight (each pm pass picks knowing what the previous one dispatched). Two limits are real, and only these two: a dispatch must not depend on or touch the same code as in-flight work, and the human merge gate paces everything: when unreviewed agent PRs are piling up, stop dispatching rather than adding more.
 
 If nothing on the backlog is actionable, say so, list what would make the top items ready, and stop. An empty dispatch is a fine outcome.

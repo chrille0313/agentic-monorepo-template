@@ -19,6 +19,8 @@ You are the **loop controller**. You do not implement or review yourself; you di
 
 If not already on a task branch/worktree: create branch `agent/<short-slug>` (worktree if the session supports it). Never build on `main`.
 
+If the task is an issue, label it `in-progress` now; remove the label when the loop ends (PR opened, or escalation).
+
 ## 3. Loop (max 3 rounds)
 
 Round N:
