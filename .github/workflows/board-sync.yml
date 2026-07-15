@@ -40,7 +40,9 @@ jobs:
     steps:
       - name: Sync issue status to the board
         run: |
-          # shellcheck disable=SC2016 # $vars in single quotes are GraphQL variables, not shell
+          # Dollar-prefixed names in the single-quoted queries below are
+          # GraphQL variables bound with -F, not shell expansions.
+          # shellcheck disable=SC2016
           set -euo pipefail
 
           if [ -z "${GH_TOKEN:-}" ]; then
