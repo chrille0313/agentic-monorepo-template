@@ -42,7 +42,7 @@ flowchart LR
 - **Outer loop** (orchestrator-workers): the full circuit around it. The PM owns the backlog: it triages, unblocks, picks the most valuable ready item, shapes the spec, and dispatches it into the inner loop. A merge closes the circle.
 
 > [!IMPORTANT]
-> Agents never merge. Every PR arrives carrying its evidence (criteria mapping, review history, executed verification), and a human holds the merge gate. Enable branch protection on `main` before turning on the autonomous modes.
+> Agents never merge. Every PR arrives carrying its evidence (criteria mapping, review history, executed verification), and a human holds the merge gate. `/setup-stack` backs this with a branch ruleset on `main`: PRs and green CI required to merge, force pushes and deletion blocked.
 
 ## Quick start
 
