@@ -21,8 +21,10 @@ on:
 
 permissions: {} # GITHUB_TOKEN is never used; everything runs on PROJECT_TOKEN
 
+# Per-item groups: a repo-wide group would let a newer pending run replace an
+# older one, silently dropping that event's sync.
 concurrency:
-  group: board-sync
+  group: board-sync-${{ github.event.issue.number || github.event.pull_request.number }}
   cancel-in-progress: false
 
 jobs:

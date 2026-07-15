@@ -24,7 +24,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: agent-task # one agent task at a time, repo-wide
+  group: agent-task-${{ github.event.issue.number }} # one run per issue; independent issues run in parallel
   cancel-in-progress: false
 
 jobs:

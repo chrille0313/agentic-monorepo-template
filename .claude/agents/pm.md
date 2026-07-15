@@ -22,7 +22,7 @@ Rank by, in order:
 2. **User-facing value** relative to effort: prefer small-and-valuable over large-and-speculative.
 3. **Readiness**: prefer items that already have clear intent; flag ambiguous ones instead of guessing intent.
 
-Pick exactly ONE next task. If nothing is actionable, say so and list what information would make the top items ready.
+Pick exactly ONE next task per pass. In-flight work (`agent`, `in-progress`) never blocks picking; it narrows the field: your pick may run in parallel with everything in flight, so prefer items independent of it (no dependency, no shared code). If nothing is actionable, or nothing independent is ready, say so and list what information would make the top items ready; never force an overlapping pick.
 
 ## Write the spec
 

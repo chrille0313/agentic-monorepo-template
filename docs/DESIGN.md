@@ -29,7 +29,7 @@ A large share of AI-generated code introduces security vulnerabilities *while pa
 
 ## The human gate is weak unless informed
 
-Automation bias is measured: developers initially accepted 82% of AI suggestions but retained only 52% (Sabouri et al., ICSE 2025), and AI-authored PRs take about 12% more human review rounds. So PRs must carry evidence (criteria mapping, severity-ranked findings, what was executed), and the pipeline pre-resolves lint/format noise before a human ever looks. The merge gate is the last line of defense, not the only one: branch protection, turn caps, and one-task-in-flight limits hold independently of human vigilance.
+Automation bias is measured: developers initially accepted 82% of AI suggestions but retained only 52% (Sabouri et al., ICSE 2025), and AI-authored PRs take about 12% more human review rounds. So PRs must carry evidence (criteria mapping, severity-ranked findings, what was executed), and the pipeline pre-resolves lint/format noise before a human ever looks. The merge gate is the last line of defense, not the only one: branch protection, turn caps, and the independence rule for parallel dispatches (no shared code, no dependencies between in-flight tasks, dispatch paced by review capacity) hold independently of human vigilance.
 
 ## Prompt philosophy
 
