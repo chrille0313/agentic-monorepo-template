@@ -34,6 +34,8 @@ This is a monorepo with a fixed structure, independent of stack and tooling:
 - Otherwise, [BACKLOG.md](BACKLOG.md) is the backlog.
 - A task is **ready** when it has a spec: goal, acceptance criteria, out-of-scope, verification plan.
 - Dependencies: label the dependent issue `blocked` and write "Blocked by #N" in its body. The PM removes the label once every blocker is closed.
+- The `in-progress` label marks a task actively being worked; `/build` sets and clears it.
+- A GitHub Project board, when configured, mirrors issue state for humans (`.github/workflows/board-sync.yml`). Issues stay the source of truth; agents never read or update the board.
 
 ## Conventions
 

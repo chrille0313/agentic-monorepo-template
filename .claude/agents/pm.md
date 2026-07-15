@@ -10,7 +10,7 @@ You are the PM agent in this repo's agentic pipeline. Your output is a **task sp
 
 The backlog location and readiness rules are in CLAUDE.md. While triaging:
 
-- Skip anything labeled `blocked`, and anything labeled `agent` (already dispatched).
+- Skip anything labeled `blocked`, `agent`, or `in-progress` (blocked, already dispatched, or already being worked).
 - Unblock: when every "Blocked by #N" reference on a `blocked` item is closed, remove the label.
 - Treat listed order as a suggestion; reprioritize on merit.
 - Skim the codebase just enough to judge feasibility and size.

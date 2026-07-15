@@ -1,0 +1,113 @@
+# Mirrors issue state onto the kanban board (GitHub Project). Strictly one-way:
+# issues are the source of truth (CLAUDE.md Backlog), agents never read the
+# board, so a stale board can mislead a human but never derail the loop.
+#
+# Dormant until configured (/setup-stack handles what it can):
+#   - PROJECT_URL repository variable, e.g. https://github.com/users/you/projects/3
+#   - PROJECT_TOKEN secret: classic PAT with `project` scope (plus `repo` for
+#     private repos). GITHUB_TOKEN cannot access Projects v2 at all, and
+#     fine-grained PATs cannot access user-owned projects.
+#
+# Status precedence, first match wins:
+#   Done (issue closed) > In Review (open PR that closes the issue) >
+#   In Progress (`in-progress` label) > Blocked (`blocked` label) > Todo
+name: Board sync
+
+on:
+  issues:
+    types: [opened, reopened, closed, labeled, unlabeled]
+  pull_request:
+    types: [opened, edited, reopened, closed]
+
+permissions: {} # GITHUB_TOKEN is never used; everything runs on PROJECT_TOKEN
+
+concurrency:
+  group: board-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: vars.PROJECT_URL != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+      PROJECT_URL: ${{ vars.PROJECT_URL }}
+      REPO: ${{ github.repository }}
+      EVENT: ${{ github.event_name }}
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - name: Sync issue status to the board
+        run: |
+          set -euo pipefail
+
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "PROJECT_TOKEN is not set; skipping board sync."
+            exit 0
+          fi
+
+          owner=$(sed -E 's#.*/(users|orgs)/([^/]+)/projects/.*#\2#' <<<"$PROJECT_URL")
+          project=$(sed -E 's#.*/projects/([0-9]+).*#\1#' <<<"$PROJECT_URL")
+
+          # Which issues does this event affect? PR events map to the issues
+          # the PR would close; issue events map to the issue itself.
+          if [ "$EVENT" = pull_request ]; then
+            issues=$(gh api graphql \
+              -F owner="${REPO%/*}" -F repo="${REPO#*/}" -F pr="$PR_NUMBER" \
+              -f query='query($owner:String!,$repo:String!,$pr:Int!){
+                repository(owner:$owner,name:$repo){ pullRequest(number:$pr){
+                  closingIssuesReferences(first:20){ nodes{ number } } } } }' \
+              --jq '.data.repository.pullRequest.closingIssuesReferences.nodes[].number')
+          else
+            issues=$ISSUE_NUMBER
+          fi
+          if [ -z "$issues" ]; then
+            echo "No linked issues; nothing to sync."
+            exit 0
+          fi
+
+          project_id=$(gh project view "$project" --owner "$owner" --format json --jq .id)
+          fields=$(gh project field-list "$project" --owner "$owner" --format json)
+          field_id=$(jq -r '.fields[] | select(.name=="Status") | .id' <<<"$fields")
+
+          while IFS= read -r n; do
+            [ -n "$n" ] || continue
+
+            issue=$(gh api graphql \
+              -F owner="${REPO%/*}" -F repo="${REPO#*/}" -F issue="$n" \
+              -f query='query($owner:String!,$repo:String!,$issue:Int!){
+                repository(owner:$owner,name:$repo){ issue(number:$issue){
+                  state
+                  labels(first:50){ nodes{ name } }
+                  closedByPullRequestsReferences(first:20, includeClosedPrs:false){
+                    nodes{ state } } } } }' \
+              --jq '.data.repository.issue')
+
+            if [ "$(jq -r .state <<<"$issue")" = CLOSED ]; then
+              status="Done"
+            elif [ "$(jq '[.closedByPullRequestsReferences.nodes[] | select(.state=="OPEN")] | length' <<<"$issue")" -gt 0 ]; then
+              status="In Review"
+            elif jq -e '.labels.nodes[] | select(.name=="in-progress")' <<<"$issue" >/dev/null; then
+              status="In Progress"
+            elif jq -e '.labels.nodes[] | select(.name=="blocked")' <<<"$issue" >/dev/null; then
+              status="Blocked"
+            else
+              status="Todo"
+            fi
+
+            option_id=$(jq -r --arg s "$status" \
+              '.fields[] | select(.name=="Status") | .options[] | select(.name==$s) | .id' <<<"$fields")
+            if [ -z "$option_id" ]; then
+              echo "Board has no \"$status\" option on its Status field; skipping #$n."
+              continue
+            fi
+
+            # item-add is idempotent: it returns the existing item if the issue
+            # is already on the board.
+            item_id=$(gh project item-add "$project" --owner "$owner" \
+              --url "https://github.com/$REPO/issues/$n" --format json --jq .id)
+            gh project item-edit --id "$item_id" --project-id "$project_id" \
+              --field-id "$field_id" --single-select-option-id "$option_id"
+            echo "#$n -> $status"
+          done <<<"$issues"
