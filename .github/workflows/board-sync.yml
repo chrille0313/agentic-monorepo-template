@@ -40,9 +40,8 @@ jobs:
     steps:
       - name: Sync issue status to the board
         run: |
-          # Dollar-prefixed names in the single-quoted queries below are
-          # GraphQL variables bound with -F, not shell expansions.
-          # shellcheck disable=SC2016
+          # Dollar-prefixed names in the single-quoted GraphQL queries are
+          # GraphQL variables bound with -F, not shell expansions (SC2016).
           set -euo pipefail
 
           if [ -z "${GH_TOKEN:-}" ]; then
@@ -56,6 +55,7 @@ jobs:
           # Which issues does this event affect? PR events map to the issues
           # the PR would close; issue events map to the issue itself.
           if [ "$EVENT" = pull_request ]; then
+            # shellcheck disable=SC2016
             issues=$(gh api graphql \
               -F owner="${REPO%/*}" -F repo="${REPO#*/}" -F pr="$PR_NUMBER" \
               -f query='query($owner:String!,$repo:String!,$pr:Int!){
@@ -77,6 +77,7 @@ jobs:
           while IFS= read -r n; do
             [ -n "$n" ] || continue
 
+            # shellcheck disable=SC2016
             issue=$(gh api graphql \
               -F owner="${REPO%/*}" -F repo="${REPO#*/}" -F issue="$n" \
               -f query='query($owner:String!,$repo:String!,$issue:Int!){
