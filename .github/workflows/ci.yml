@@ -28,6 +28,18 @@ jobs:
       - name: Contract not wired yet
         run: echo "Run /setup-stack to wire the command contract into this job."
 
+      # Committed build output is the one thing no other gate can see: generated
+      # files are excluded from lint, format and typecheck by necessity, and the
+      # steps above regenerate them in the runner, so CI passes no matter what
+      # was committed. A stale or hand-edited copy reads as fine in review.
+      # Fail if running the contract changed anything tracked. Stays last.
+      - name: Generated files are up to date
+        run: |
+          if ! git diff --exit-code; then
+            echo "::error::Running the command contract changed tracked files. Regenerate and commit them (see the diff above)."
+            exit 1
+          fi
+
   # Behavior, not just compilation: start the app and drive its critical user
   # journeys. This is where the full suite runs; agents in the loop exercise the
   # surface their diff touches. Wired by /setup-stack.

@@ -26,7 +26,7 @@ Both must be reliable enough that red means "the app is broken", never "the harn
 
 ## 4. Fill the command contract
 
-Replace every `TODO` in CLAUDE.md's command-contract section with real commands. Wire check/test/build into the `gates` job of `.github/workflows/ci.yml`, and smoke into its `smoke` job; as a PR gate rather than a per-round command, smoke can afford to be slower, as long as it stays reliable. Also add the stack's package ecosystem to `.github/dependabot.yml` if it introduces one that isn't covered (npm is already active for the repo's toolchain; keep updates grouped). Then **verify each contract entry by running it**; a command that hasn't run green doesn't go in. Keep check/test/build fast and deterministic: they gate every inner-loop round.
+Replace every `TODO` in CLAUDE.md's command-contract section with real commands. Wire check/test/build into the `gates` job of `.github/workflows/ci.yml`, above the generated-file drift step that ends that job, and smoke into its `smoke` job; as a PR gate rather than a per-round command, smoke can afford to be slower, as long as it stays reliable. The drift step assumes a hermetic build, so confirm it passes on a clean tree: anything the contract rewrites on every run belongs in `.gitignore`, or the command needs fixing. Also add the stack's package ecosystem to `.github/dependabot.yml` if it introduces one that isn't covered (npm is already active for the repo's toolchain; keep updates grouped). Then **verify each contract entry by running it**; a command that hasn't run green doesn't go in. Keep check/test/build fast and deterministic: they gate every inner-loop round.
 
 ## 5. Releases and deploys
 
