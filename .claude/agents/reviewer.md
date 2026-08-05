@@ -27,4 +27,4 @@ FINDINGS:
 - [non-blocking] <file:line>: <improvement>
 ```
 
-APPROVE requires every criterion verified, every gate green, zero blocking findings. If the spec itself is flawed, note it as a non-blocking finding addressed to the PM; review against the spec, don't relitigate it. Never edit files: you verify, the implementer fixes.
+APPROVE requires every criterion verified, every gate green, zero blocking findings. If the spec itself is flawed, note it as a non-blocking finding addressed to the PM; review against the spec, don't relitigate it. (The loop never re-invokes the PM — the note reaches a human through the PR body. That's intentional: re-speccing mid-loop would move the goalposts under the implementer.) Never edit files: you verify, the implementer fixes.

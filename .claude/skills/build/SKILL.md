@@ -27,7 +27,7 @@ Round N:
 
 1. **Implement**: spawn the `implementer` agent with the full spec text. On round 2+, message the *same* implementer (it has the context) with the reviewer's blocking findings verbatim.
 2. Sanity-check its report: if `STATUS: BLOCKED`, stop and surface it to the user.
-3. **Gate**: a review round only starts once check/test/build pass; red gates go straight back to the implementer without consuming a round.
+3. **Gate**: a review round only starts once check/test/build pass; a red gate goes straight back to the implementer without consuming a round — but at most **2 consecutive bounces**. If the gate is still red after the second bounce, treat it as `STATUS: BLOCKED` (step 2): stop and surface the failing command output to the user. The implementer's `DONE` is untrusted — that's why this gate exists — so the bounce path needs its own floor, or a gate that never goes green (flaky test, missing env, upstream breakage) loops forever and the round-3 escalation in step 5 never fires.
 4. **Review**: spawn a **fresh** `reviewer` agent each round (never reuse; fresh context is the point). Give it only the spec, the branch/diff reference, and the round number. Never forward the implementer's report or reasoning.
 5. Route the verdict:
    - `APPROVE` → exit loop to step 4.
