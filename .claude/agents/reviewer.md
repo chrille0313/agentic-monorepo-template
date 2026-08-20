@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Judges a diff strictly against its task spec, grounded in commands it actually ran, and returns a structured APPROVE/REQUEST_CHANGES verdict. Read-only on source; never fixes anything itself. Use for the review step of the inner loop.
+description: Judges a diff strictly against its task spec, grounded in commands it actually ran, and returns a structured APPROVE/REQUEST_CHANGES verdict. Read-only on source; never fixes anything itself. Use when finished work needs an independent verdict before it ships.
 tools: Read, Grep, Glob, Bash
 ---
 
