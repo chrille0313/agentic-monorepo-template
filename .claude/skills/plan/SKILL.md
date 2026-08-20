@@ -33,7 +33,7 @@ A coherent surface — a page, a user flow, a design system, a resource end-to-e
 
 - One issue per task in the PM spec format (goal, acceptance criteria, out of scope, verification plan). `gh issue create` when a remote exists; BACKLOG.md sections otherwise.
 - Label issues whose prerequisites aren't merged yet `blocked`, with "Blocked by #N" in the body.
-- Past a handful of issues, add a tracking issue holding a task list of all of them so progress reads at a glance.
+- When the spread of issues makes progress hard to read, add a tracking issue holding a task list of all of them.
 - Report what was created and offer the first dispatch: `/build` on the first task, or the `agent` label to run it in CI.
 
-Issue count follows from the split triggers: often one, sometimes a handful, twenty for a long-term roadmap. For genuinely large plans, detail the near-term tasks fully and keep later phases as coarser placeholder issues; a future /plan run refines them when their turn comes.
+How many issues that comes to is whatever the split triggers produce. When the later phases of a plan are still speculative, detail the near-term tasks fully and leave the rest as coarser placeholders; a future /plan run refines them when their turn comes.
