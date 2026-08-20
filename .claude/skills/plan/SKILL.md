@@ -23,7 +23,7 @@ Size tasks by cohesion. One task is a chunk an implementer can carry to a cohere
 - a risky unknown worth landing on its own, so it can be judged or reverted in isolation,
 - a diff a human could no longer review honestly in one pass.
 
-Anything with a single coherent surface — a page, a user flow, a design system, a resource end-to-end — is one task, built whole. Slicing a UI by section is the classic failure: five PRs that each pass review and together look like five different products.
+A coherent surface — a page, a user flow, a design system, a resource end-to-end — is the natural unit: build it whole while the diff stays reviewable. Slicing a UI by section is the classic failure, five PRs that each pass review and together look like five different products; when a surface genuinely outgrows one task, split it so the design is still decided once — its foundation lands first and later tasks conform to it.
 
 ## 3. Land the plan
 

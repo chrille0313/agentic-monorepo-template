@@ -99,7 +99,7 @@ Every rail below traces to published evidence; see [docs/DESIGN.md](docs/DESIGN.
 - **Bounded loops at three levels.** At most 3 implement/review rounds with a no-progress early exit, `--max-turns` caps any single agent, and workflow timeouts cap each CI run.
 - **No consensus-seeking.** Disputed findings go to an independent judge (or the human, locally). The implementer and reviewer never negotiate each other into agreement.
 - **Informed human merge gate.** PRs carry criteria mapping, severity-ranked findings, and executed verification evidence, so merging is an informed check rather than a rubber stamp.
-- **Spec-driven, right-sized.** Nothing is implemented without acceptance criteria. Tasks are sized by cohesion: a page, a flow or a design system is one task, built whole, and a split needs a named reason.
+- **Spec-driven, right-sized.** Nothing is implemented without acceptance criteria. Tasks are sized by cohesion: a page, a flow or a design system is built whole rather than in sections, and a split needs a named reason.
 - **Tests are a floor.** An independent security scan runs in CI, and the reviewer explicitly judges whether the tests themselves are meaningful.
 
 ## Adapting the template

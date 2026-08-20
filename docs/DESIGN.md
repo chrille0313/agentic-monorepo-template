@@ -41,7 +41,7 @@ Agent prompts state **outcomes and constraints, not procedures**. Over-prompting
 
 Orchestration is *dynamic* decomposition, which cuts both ways: an orchestrator that always decomposes isn't orchestrating, it's shredding. Every extra task costs a spec, a branch, a review loop and a merge, and none of that buys quality — first-pass quality dominates final quality, and a feature split five ways has five first passes to get right instead of one.
 
-The failure is sharpest in interface work, where coherence is not a property any single slice can carry: five sections built in five loops, each approved against its own criteria, compose into an interface that looks assembled rather than designed. A spec written as an inventory of parts produces the same result.
+The failure is sharpest in interface work, where coherence is not a property any single slice can carry: five sections built in five loops, each approved against its own criteria, compose into an interface that looks assembled rather than designed. A spec written as an inventory of parts produces the same result. Where a surface genuinely exceeds one sitting's review, the split that keeps coherence is foundation-first — layout, tokens and component vocabulary decided once, later tasks conforming to them — rather than section by section.
 
 Hence the sizing rule: one task is what an implementer can carry to a coherent end and a human can review in one sitting, and a split needs a named trigger (hard dependency, risky unknown worth landing alone, diff too large to review honestly). This is operating experience with this template rather than a citation; instrument it the same way — track how many of your merged PRs would have been better as one.
 
