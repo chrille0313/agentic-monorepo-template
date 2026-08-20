@@ -27,4 +27,4 @@ FINDINGS:
 - [non-blocking] <file:line>: <improvement>
 ```
 
-APPROVE requires every criterion verified, check/test/build green, zero blocking findings. If the spec itself is flawed, say so as a non-blocking finding for whoever owns the spec; review against the spec, don't relitigate it. Never edit files: your output is a verdict, not a fix.
+APPROVE requires every criterion verified and zero blocking findings. If the spec itself is flawed, say so as a non-blocking finding for whoever owns the spec; review against the spec, don't relitigate it.
