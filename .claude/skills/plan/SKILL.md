@@ -1,13 +1,13 @@
 ---
 name: plan
-description: Interactively plan a feature with the user, then fan the agreed plan out into build-ready, dependency-ordered backlog issues. Use when the user says "plan X", "break down X", "create issues for X", or brings an idea too large for a single /build task.
+description: Interactively plan a feature with the user, then land it as right-sized build-ready tasks: one spec handed straight to /build, or dependency-ordered backlog issues. Use when the user says "plan X", "break down X", "create issues for X", or brings an idea too large for a single /build task.
 ---
 
-# /plan: from idea to build-ready backlog
+# /plan: from idea to build-ready work
 
 Input (`$ARGUMENTS`): a feature or project description, however rough.
 
-Outcome: a plan the user has explicitly approved, fanned out into spec-formatted issues the inner loop can consume one at a time. The quality bar is high on purpose: first-pass quality is the dominant predictor of loop output (see docs/DESIGN.md), and the spec is where first-pass quality is decided.
+Outcome: a plan the user has explicitly approved, expressed as right-sized, build-ready tasks the inner loop can consume one at a time. The quality bar is high on purpose: first-pass quality is the dominant predictor of loop output (see docs/DESIGN.md), and the spec is where first-pass quality is decided.
 
 ## 1. Understand before proposing
 
@@ -15,13 +15,25 @@ Interview the user, as many rounds as it takes, until you can state without gues
 
 ## 2. Propose, then iterate to approval
 
-Present the plan: approach, slice decomposition, ordering with dependencies, and open risks. Each slice must be one PR-sized task that is independently verifiable and leaves the app releasable. Iterate until the user explicitly approves. Create nothing before approval.
+Present the plan: approach, decomposition, ordering with dependencies, and open risks. Iterate until the user explicitly approves. Create nothing before approval.
 
-## 3. Fan out
+Size tasks by cohesion. One task is a chunk an implementer can carry to a coherent, finished state and a human can still review in one sitting; it leaves the app releasable and is verifiable on its own. Splitting costs a spec, a branch, a review loop and a merge, and the seams are where incoherence enters, so a split needs a reason — typically:
 
-- One issue per slice in the PM spec format (goal, acceptance criteria, out of scope, verification plan). `gh issue create` when a remote exists; BACKLOG.md sections otherwise.
+- a hard dependency (one task's output is another's input),
+- a risky unknown worth landing on its own, so it can be judged or reverted in isolation,
+- a diff a human could no longer review honestly in one pass.
+
+A coherent surface — a page, a user flow, a design system, a resource end-to-end — is the natural unit: build it whole while the diff stays reviewable. Slicing a UI by section is the classic failure, five PRs that each pass review and together look like five different products; when a surface genuinely outgrows one task, split it so the design is still decided once — its foundation lands first and later tasks conform to it.
+
+## 3. Land the plan
+
+**If it is one task**: write the single spec and hand it to `/build` (or the `agent` label). No issues needed.
+
+**If it is several**:
+
+- One issue per task in the PM spec format (goal, acceptance criteria, out of scope, verification plan). `gh issue create` when a remote exists; BACKLOG.md sections otherwise.
 - Label issues whose prerequisites aren't merged yet `blocked`, with "Blocked by #N" in the body.
-- Create a tracking issue holding a task list of all slices so progress reads at a glance.
-- Report what was created and offer the first dispatch: `/build` on the first slice, or the `agent` label to run it in CI.
+- When the spread of issues makes progress hard to read, add a tracking issue holding a task list of all of them.
+- Report what was created and offer the first dispatch: `/build` on the first task, or the `agent` label to run it in CI.
 
-Issue count follows from scope: a small feature may be 2 slices, a long-term roadmap may be 20. The invariant is slice size, not count: each slice small enough that the loop converges in 1-2 review rounds. For genuinely large plans, detail the near-term slices fully and keep later phases as coarser placeholder issues; a future /plan run refines them when their turn comes.
+How many issues that comes to is whatever the split triggers produce. When the later phases of a plan are still speculative, detail the near-term tasks fully and leave the rest as coarser placeholders; a future /plan run refines them when their turn comes.

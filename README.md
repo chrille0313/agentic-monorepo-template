@@ -38,7 +38,7 @@ flowchart LR
     gate -- "merge" --> backlog
 ```
 
-- **Inner loop** (evaluator-optimizer): the implement/review cycle. The implementer builds against a task spec, then a reviewer with completely fresh context judges the diff, grounded in commands it actually ran. Findings cycle back until approval, an iteration cap, or a no-progress exit.
+- **Inner loop** (evaluator-optimizer): the implement/gate/review cycle. The implementer builds against a task spec, the loop controller runs the command contract once on the finished diff, then a reviewer with completely fresh context judges it, grounded in behavior it actually exercised. Findings cycle back until approval, an iteration cap, or a no-progress exit.
 - **Outer loop** (orchestrator-workers): the full circuit around it. The PM owns the backlog: it triages, unblocks, picks the most valuable ready item, shapes the spec, and dispatches it into the inner loop. A merge closes the circle.
 
 > [!IMPORTANT]
@@ -81,7 +81,7 @@ packages/          shared libraries used by apps
   skills/          /plan (idea to issues), /build (inner loop), /pm (outer loop),
                    /commit (small modular commits), /setup-stack (one-time adapt)
   workflows/       feature-loop.js, a deterministic scripted variant of the inner loop
-.github/workflows/ ci.yml (contract gates, commit lint, workflow lint, security scan),
+.github/workflows/ ci.yml (contract gates, smoke journeys, commit lint, workflow lint, security scan),
                    agent-task.yml (label-triggered inner loop), pm-cron.yml (scheduled PM)
 docs/DESIGN.md     the research-backed rationale for every design choice
 BACKLOG.md         local backlog fallback when GitHub Issues aren't available
@@ -94,12 +94,12 @@ The `apps/` + `packages/` layout is fixed regardless of stack; the workspace *to
 
 Every rail below traces to published evidence; see [docs/DESIGN.md](docs/DESIGN.md) for the receipts.
 
-- **Deterministic gates beneath review.** Check, test, and build run in CI on every PR and must be green before a review round even starts. Agent review layers on top of machinery that can't be talked past.
-- **Grounded review.** The reviewer sees only the spec and the diff, never the implementer's reasoning, and a blocking finding requires evidence the reviewer *executed*: a failing command, a reproduced wrong output. Agents verify behavior through the contract's `run`/`smoke` path, not just compilation.
+- **Deterministic gates beneath review.** Check, test, and build must be green before a review round even starts, and CI runs them again on every PR. Agent review layers on top of machinery that can't be talked past. The loop controller owns that run, once per round, so it is never the code's author grading their own work.
+- **Grounded review.** The reviewer sees only the spec, the diff and the gate result, never the implementer's reasoning, and a blocking finding requires evidence the reviewer *executed*: a failing command, a reproduced wrong output. Its own runs go on the running app, exercising the surface the diff touched; the full journey suite gates the PR in CI.
 - **Bounded loops at three levels.** At most 3 implement/review rounds with a no-progress early exit, `--max-turns` caps any single agent, and workflow timeouts cap each CI run.
 - **No consensus-seeking.** Disputed findings go to an independent judge (or the human, locally). The implementer and reviewer never negotiate each other into agreement.
 - **Informed human merge gate.** PRs carry criteria mapping, severity-ranked findings, and executed verification evidence, so merging is an informed check rather than a rubber stamp.
-- **Spec-driven.** Nothing is implemented without acceptance criteria; the PM decomposes anything too big for one PR.
+- **Spec-driven, right-sized.** Nothing is implemented without acceptance criteria. Tasks are sized by cohesion: a page, a flow or a design system is built whole rather than in sections, and a split needs a named reason.
 - **Tests are a floor.** An independent security scan runs in CI, and the reviewer explicitly judges whether the tests themselves are meaningful.
 
 ## Adapting the template
