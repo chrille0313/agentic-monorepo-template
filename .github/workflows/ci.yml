@@ -28,6 +28,25 @@ jobs:
       - name: Contract not wired yet
         run: echo "Run /setup-stack to wire the command contract into this job."
 
+  # Behavior, not just compilation: start the app and drive its critical user
+  # journeys. This is the merge gate for smoke, which is why the inner loop does
+  # not re-run the full suite every review round; agents there exercise only the
+  # surface their diff touches. Wired by /setup-stack.
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      # One step per contract entry needed to run the app, then the smoke
+      # command itself. Pin any new action to a full commit SHA. E.g.:
+      # - uses: pnpm/action-setup@<commit-sha> # v4
+      # - run: pnpm install --frozen-lockfile
+      # - run: <run command> &
+      # - run: <smoke command>
+      - name: Smoke not wired yet
+        run: echo "Run /setup-stack to wire the smoke command into this job."
+
   # Conventional commits, enforced (CLAUDE.md states the rule; this checks it).
   # Applies to agents and humans alike. commitlint versions come from the
   # repo's own package.json (Dependabot keeps them current); the pnpm version
