@@ -12,7 +12,7 @@ The single strongest result in the literature: LLMs cannot reliably improve thei
 
 Hence: the command contract is a **hard gate beneath the reviewer** (CI enforces the same commands), blocking findings **require executed evidence**, and the contract includes **Run/Smoke** so agents verify behavior. A verifier that only checks compilation is a named failure mode in the MAST taxonomy ([Cemri et al., NeurIPS 2025](https://arxiv.org/html/2503.13657v1)).
 
-Independence is a property of *who* runs the gate, not of how many times it runs. Re-executing the same deterministic commands adds wall-clock, not signal, so the loop controller runs check/test/build once per round and CI runs them again on the PR. That leaves the reviewer's own runs for what no gate produces: a running app, exercised on the surface the diff touched.
+Grounding review in execution does not mean every agent runs the checks itself. Deterministic commands return the same answer whoever runs them, so what buys independence is that the author isn't the one certifying their own work — not the number of agents repeating the run. Check/test/build therefore run once per round, dispatched by the controller rather than the implementer, and again in CI on the PR. The reviewer's own commands go where a repeat would actually add something: a running app, exercised on the surface the diff touched.
 
 ## Both review failure modes are guarded
 
