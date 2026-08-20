@@ -11,7 +11,7 @@ You are the **loop controller**. You do not implement or review yourself; you di
 
 ## 1. Resolve the spec
 
-- Issue number → `gh issue view <n>` (body + comments; the newest spec-formatted comment wins).
+- Issue number → `gh issue view <n>` (body + comments).
 - Description or empty → if it already has acceptance criteria, use it; otherwise spawn the `pm` agent to shape it into a spec (for empty input, PM also picks the item).
 - No acceptance criteria obtainable → stop and ask the user; never build without a spec.
 
