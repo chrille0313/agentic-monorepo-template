@@ -20,13 +20,13 @@ Use the stack's official initializer where one exists, scaffolding into the repo
 The part most templates skip. Agents must be able to verify *behavior*, not just that code compiles:
 
 - **Run**: the app starts with one command, on a stable port/URL (or deterministic CLI entrypoint), with seeded deterministic data. No interactive prompts, no manual setup steps.
-- **Smoke**: one command drives the *running* app through its critical user journeys (HTTP calls against real endpoints, CLI invocations checking real output, or a headless-browser check for UIs) and exits non-zero on failure. Today that is one journey, because the app has one; it is a suite that grows with the app, not a boot check that stays frozen while everything around it changes.
+- **Smoke**: one command drives the *running* app through its critical user journeys (HTTP calls against real endpoints, CLI invocations checking real output, or a headless-browser check for UIs) and exits non-zero on failure. Today that is one journey, because the app has one; it grows with the app.
 
 Both must be reliable enough that red means "the app is broken", never "the harness is flaky".
 
 ## 4. Fill the command contract
 
-Replace every `TODO` in CLAUDE.md's command-contract section with real commands. Wire check/test/build into the `gates` job of `.github/workflows/ci.yml`, and smoke into its `smoke` job — smoke is a merge gate on the PR rather than something every review round re-runs, so it is allowed to be slower than the others, but it must not be flaky. Also add the stack's package ecosystem to `.github/dependabot.yml` if it introduces one that isn't covered (npm is already active for the repo's toolchain; keep updates grouped). Then **verify each contract entry by running it**; a command that hasn't run green doesn't go in. Keep check/test/build fast and deterministic: they gate every inner-loop round.
+Replace every `TODO` in CLAUDE.md's command-contract section with real commands. Wire check/test/build into the `gates` job of `.github/workflows/ci.yml`, and smoke into its `smoke` job; as a PR gate rather than a per-round command, smoke can afford to be slower, as long as it stays reliable. Also add the stack's package ecosystem to `.github/dependabot.yml` if it introduces one that isn't covered (npm is already active for the repo's toolchain; keep updates grouped). Then **verify each contract entry by running it**; a command that hasn't run green doesn't go in. Keep check/test/build fast and deterministic: they gate every inner-loop round.
 
 ## 5. Releases and deploys
 

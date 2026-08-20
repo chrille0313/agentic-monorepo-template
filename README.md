@@ -94,12 +94,12 @@ The `apps/` + `packages/` layout is fixed regardless of stack; the workspace *to
 
 Every rail below traces to published evidence; see [docs/DESIGN.md](docs/DESIGN.md) for the receipts.
 
-- **Deterministic gates beneath review.** Check, test, and build must be green before a review round even starts, and CI runs them again on every PR. Agent review layers on top of machinery that can't be talked past. The loop controller owns that run: it happens once per round, never by the code's author and never twice.
-- **Grounded review.** The reviewer sees only the spec, the diff and the gate result, never the implementer's reasoning, and a blocking finding requires evidence the reviewer *executed*: a failing command, a reproduced wrong output. It spends its budget on the running app, exercising the surface the diff touched; the full journey suite gates the PR in CI.
+- **Deterministic gates beneath review.** Check, test, and build must be green before a review round even starts, and CI runs them again on every PR. Agent review layers on top of machinery that can't be talked past. The loop controller owns that run, once per round, so it is never the code's author grading their own work.
+- **Grounded review.** The reviewer sees only the spec, the diff and the gate result, never the implementer's reasoning, and a blocking finding requires evidence the reviewer *executed*: a failing command, a reproduced wrong output. Its own runs go on the running app, exercising the surface the diff touched; the full journey suite gates the PR in CI.
 - **Bounded loops at three levels.** At most 3 implement/review rounds with a no-progress early exit, `--max-turns` caps any single agent, and workflow timeouts cap each CI run.
 - **No consensus-seeking.** Disputed findings go to an independent judge (or the human, locally). The implementer and reviewer never negotiate each other into agreement.
 - **Informed human merge gate.** PRs carry criteria mapping, severity-ranked findings, and executed verification evidence, so merging is an informed check rather than a rubber stamp.
-- **Spec-driven, right-sized.** Nothing is implemented without acceptance criteria. Tasks are sized by cohesion rather than cut as small as they will go: a page, a flow or a design system is one task, built whole, and a split needs a named reason.
+- **Spec-driven, right-sized.** Nothing is implemented without acceptance criteria. Tasks are sized by cohesion: a page, a flow or a design system is one task, built whole, and a split needs a named reason.
 - **Tests are a floor.** An independent security scan runs in CI, and the reviewer explicitly judges whether the tests themselves are meaningful.
 
 ## Adapting the template

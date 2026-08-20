@@ -29,8 +29,7 @@ jobs:
         run: echo "Run /setup-stack to wire the command contract into this job."
 
   # Behavior, not just compilation: start the app and drive its critical user
-  # journeys. This is the merge gate for smoke, which is why the inner loop does
-  # not re-run the full suite every review round; agents there exercise only the
+  # journeys. This is where the full suite runs; agents in the loop exercise the
   # surface their diff touches. Wired by /setup-stack.
   smoke:
     runs-on: ubuntu-latest

@@ -27,7 +27,7 @@ Round N:
 
 1. **Implement**: spawn the `implementer` agent with the full spec text. On round 2+, message the *same* implementer (it has the context) with the reviewer's blocking findings verbatim.
 2. Sanity-check its report: if `STATUS: BLOCKED`, stop and surface it to the user.
-3. **Gate**: run check/test/build yourself, once, on the finished diff. This is the only place they run in the loop — the implementer runs only targeted checks while working, and the reviewer runs none — so the run is neither duplicated nor owned by the code's author. Red goes straight back to the implementer without consuming a round.
+3. **Gate**: run check/test/build yourself on the finished diff. You own this run: the implementer checks only what it touched, and the reviewer takes your result as given. Red goes straight back to the implementer without consuming a round.
 4. **Review**: spawn a **fresh** `reviewer` agent each round (never reuse; fresh context is the point). Give it only the spec, the branch/diff reference, the round number, and the gate result. Never forward the implementer's report or reasoning.
 5. Route the verdict:
    - `APPROVE` → exit loop to step 4.
@@ -38,7 +38,7 @@ Round N:
 
 ## 4. On approval
 
-The approved diff is the one your gate already ran green on, so don't re-run the contract; CI runs it again on the PR.
+Your gate already ran green on the approved diff, and CI runs it again on the PR.
 
 1. Commit on the task branch following the `commit` skill: small modular commits, referencing the source issue.
 2. **Interactive session** → present a summary and ask whether to push + open a PR.
