@@ -11,12 +11,18 @@ This repo is agentic-first: features flow through a PM -> implementer -> reviewe
 - **Test**: `TODO: run /setup-stack`
 - **Build**: `TODO: run /setup-stack`
 - **Run** (start the app so an agent can exercise it, via a stable port/URL or CLI entrypoint): `TODO: run /setup-stack`
-- **Smoke** (drive the *running* app end-to-end; deterministic, seeded): `TODO: run /setup-stack`
+- **Smoke** (drive the *running* app through its critical user journeys; deterministic, seeded): `TODO: run /setup-stack`
 
 Check, test, and build are hard gates: they must exit 0 before agent review means
-anything. Review layers on top of deterministic checks, never replaces them.
+anything. Review layers on top of deterministic checks, never replaces them. They run
+once per review round, owned by the loop controller: the implementer runs only the
+narrowest checks that could fail while working, and the reviewer runs none.
 Run and smoke exist so agents can verify *behavior*, not just code: this repo treats
 "an agent can start and exercise the app" as a first-class requirement of the stack.
+Smoke is a living suite that every feature adding a user journey extends; a smoke command
+that still only proves the process boots has stopped earning its runtime. The full suite is
+a CI gate on the PR, not a per-round ritual — inside the loop, agents exercise the surface
+the diff actually touches.
 
 If a contract command is still `TODO`, say so and stop. Do not invent a substitute.
 
@@ -43,5 +49,6 @@ This is a monorepo with a fixed structure, independent of stack and tooling:
 - One task = one branch = one PR. Branch names: `agent/<short-slug>`.
 - Conventional commits (`feat:`, `fix:`, `chore:`, ...), enforced by the `commits` job in CI.
 - Commit messages are for developers; release notes are for users. A PR that changes user-facing behavior also includes a short note written for users, in whatever form the release tooling collects (changeset file, fragment, ...); the spec's Goal section is good raw material. Release notes are those collected notes, never the commit log.
-- Verification is executed, not argued: any claim about behavior is backed by a command that actually ran (a test, a smoke check, a reproduced output).
+- Verification is executed, not argued: any claim about behavior is backed by a command that actually ran (a test, a smoke check, a reproduced output). Executed, not compulsive: run the narrowest check that could fail on what you just touched, and let the full contract run at the boundary, once, where the loop controller owns it.
+- Tasks are sized by cohesion, not by how small they can be cut: one task is the largest chunk an implementer can finish coherently and a human can review in one sitting. A single user-visible surface — a page, a flow, a design system — is one task, built whole. Splitting one is how interfaces end up looking assembled rather than designed; decompose only for a hard dependency, a risky unknown worth landing alone, or a diff too large to review honestly.
 - Agent prompts state outcomes and constraints, not step-by-step procedures. Keep them short; trust the model. One owner per rule: repo-wide conventions live here, an agent's behavior lives in its agent file, orchestration lives in the skill that runs it.

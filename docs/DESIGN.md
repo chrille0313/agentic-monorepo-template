@@ -12,6 +12,8 @@ The single strongest result in the literature: LLMs cannot reliably improve thei
 
 Hence: the command contract is a **hard gate beneath the reviewer** (CI enforces the same commands), blocking findings **require executed evidence**, and the contract includes **Run/Smoke** so agents verify behavior. A verifier that only checks compilation is a named failure mode in the MAST taxonomy ([Cemri et al., NeurIPS 2025](https://arxiv.org/html/2503.13657v1)).
 
+Independence is a property of *who* runs the gate, not of how many times it runs. The author must not grade their own work, but a second and third execution of the same deterministic commands adds no signal — it only adds wall-clock. So the loop controller runs check/test/build once per round, CI runs them again on the PR, and the reviewer runs neither. The reviewer's budget goes to what no gate can produce: a running app, exercised on the surface the diff touched.
+
 ## Both review failure modes are guarded
 
 - **Rubber-stamping** is countered by the fresh-context reviewer (it never sees the implementer's reasoning) and by sending disputes to an independent judge instead of implementer-reviewer consensus. Sycophancy intensifies during negotiation, and adding a judge roughly halves collapse rates.
@@ -19,7 +21,7 @@ Hence: the command contract is a **hard gate beneath the reviewer** (CI enforces
 
 ## 3 rounds, with early exit
 
-Debate studies recommend capping at 2-3 substantive exchanges: sycophancy grows in later rounds while marginal quality gains shrink, and *initial* answer quality dominates final quality (beta=0.600, p<0.001; the structural knobs of the loop were statistically insignificant) ([arXiv 2511.07784](https://arxiv.org/html/2511.07784v1)). Two consequences: the cap stays at 3, and effort goes into first-pass quality (spec quality, PM decomposition) rather than more rounds. The **no-progress exit** ends the loop as soon as a round changes nothing, since continuing is provably wasted.
+Debate studies recommend capping at 2-3 substantive exchanges: sycophancy grows in later rounds while marginal quality gains shrink, and *initial* answer quality dominates final quality (beta=0.600, p<0.001; the structural knobs of the loop were statistically insignificant) ([arXiv 2511.07784](https://arxiv.org/html/2511.07784v1)). Two consequences: the cap stays at 3, and effort goes into first-pass quality (spec quality, right-sized tasks) rather than more rounds. The **no-progress exit** ends the loop as soon as a round changes nothing, since continuing is provably wasted.
 
 Rounds are not turns: the 3-round cap bounds implement/review *cycles*, `--max-turns` bounds steps inside a single agent, and workflow timeouts bound wall-clock time per CI run. Independent circuit breakers at independent levels.
 
@@ -34,6 +36,18 @@ Automation bias is measured: developers initially accepted 82% of AI suggestions
 ## Prompt philosophy
 
 Agent prompts state **outcomes and constraints, not procedures**. Over-prompting encodes today's assumptions into every future run; models reason better toward a clearly stated outcome than through a prescribed checklist. Keep prompts short. The exception: message formats the loop parses (verdicts, reports) are specified exactly.
+
+## Task size is a cohesion decision, not a minimization problem
+
+Orchestration is *dynamic* decomposition, which cuts both ways: an orchestrator that always decomposes isn't orchestrating, it's shredding. Every extra task costs a spec, a branch, a review loop, a merge and a context reload, and none of that cost buys quality — the evidence points the other way, since first-pass quality dominates final quality and a task split across five loops has five first passes to get right instead of one.
+
+The failure is sharpest in interface work. A design surface is coherent or it isn't, and coherence is not a property any single slice can carry: five sections built in five loops, each approved against its own criteria, compose into an interface that looks assembled rather than designed. The same holds for a spec written as an inventory of parts — over-itemized acceptance criteria produce exactly the UI they describe.
+
+Hence the sizing rule: one task is the largest chunk an implementer can carry to a coherent end and a human can review in one sitting, and a split requires a named trigger (hard dependency, risky unknown worth landing alone, diff too large to review honestly). "It could be smaller" is not a trigger. This is operating experience with this template, not a citation; instrument it the same way — track how many of your merged PRs would have been better as one.
+
+## Smoke is a suite, not a ritual
+
+Behavioral verification earns its place by testing what could plausibly be broken. A smoke command that only proves the process boots stops doing that after the first few features, and re-running it every review round buys nothing while taxing every loop. So smoke is defined as the app's critical user journeys, extended by every feature that adds one, and its full run is a CI gate on the PR. Inside the loop, agents exercise the surface their diff touched. Coverage moves to where it is cheap; the per-round check stays where the risk actually is.
 
 ## Known caveats
 
