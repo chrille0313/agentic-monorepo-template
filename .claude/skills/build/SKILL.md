@@ -7,7 +7,7 @@ description: Run the inner agentic loop on one task. The implementer builds, a f
 
 Input (`$ARGUMENTS`): an issue number, a task description, or empty (meaning the next ready backlog item).
 
-You are the **loop controller**. You do not implement or review yourself; you dispatch the `implementer` and `reviewer` subagents, route the verdict, and own git state.
+You are the **loop controller**. You do not implement or review yourself; you dispatch the `implementer` and `reviewer` subagents, own the command-contract gate, route the verdict, and own git state.
 
 ## 1. Resolve the spec
 
@@ -27,8 +27,8 @@ Round N:
 
 1. **Implement**: spawn the `implementer` agent with the full spec text. On round 2+, message the *same* implementer (it has the context) with the reviewer's blocking findings verbatim.
 2. Sanity-check its report: if `STATUS: BLOCKED`, stop and surface it to the user.
-3. **Gate**: a review round only starts once check/test/build pass; red gates go straight back to the implementer without consuming a round.
-4. **Review**: spawn a **fresh** `reviewer` agent each round (never reuse; fresh context is the point). Give it only the spec, the branch/diff reference, and the round number. Never forward the implementer's report or reasoning.
+3. **Gate**: run check/test/build yourself, once, on the finished diff. This is the only place they run in the loop — the implementer runs only targeted checks while working, and the reviewer runs none — so the run is neither duplicated nor owned by the code's author. Red goes straight back to the implementer without consuming a round.
+4. **Review**: spawn a **fresh** `reviewer` agent each round (never reuse; fresh context is the point). Give it only the spec, the branch/diff reference, the round number, and the gate result. Never forward the implementer's report or reasoning.
 5. Route the verdict:
    - `APPROVE` → exit loop to step 4.
    - `REQUEST_CHANGES` → next round with the blocking findings.
@@ -38,12 +38,13 @@ Round N:
 
 ## 4. On approval
 
-1. Run the command contract yourself once (trust but verify).
-2. Commit on the task branch following the `commit` skill: small modular commits, referencing the source issue.
-3. **Interactive session** → present a summary and ask whether to push + open a PR.
+The approved diff is the one your gate already ran green on, so don't re-run the contract; CI runs it again on the PR.
+
+1. Commit on the task branch following the `commit` skill: small modular commits, referencing the source issue.
+2. **Interactive session** → present a summary and ask whether to push + open a PR.
    **Headless/CI session** → push and open a PR, `Closes #<n>` in the body, and comment the PR link on the issue.
-4. The summary/PR body must make the human gate an *informed* check, not a rubber stamp:
+3. The summary/PR body must make the human gate an *informed* check, not a rubber stamp:
    - what was built, mapped to the acceptance criteria
    - review-round history: findings by severity, fixed vs disputed
-   - verification evidence: which commands ran (contract + smoke) and their results
-5. Never merge. The merge gate is human.
+   - verification evidence: the gate result, and what the reviewer exercised on the running app
+4. Never merge. The merge gate is human.
