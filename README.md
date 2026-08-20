@@ -53,7 +53,7 @@ flowchart LR
 
 | Command | What it does |
 |---|---|
-| `/plan <feature>` | Interactive planning interview, then the fewest build-ready tasks that cover it |
+| `/plan <feature>` | Interactive planning interview, then spec-formatted, dependency-ordered issues |
 | `/build <description or #issue>` | Runs the inner loop on one task, with you at the merge gate |
 | `/pm` | Runs the outer loop once: triage, pick the next item, spec it, offer to build |
 | `/pm --dispatch` | Same, but dispatches by labeling the issue `agent` (triggers CI) |
