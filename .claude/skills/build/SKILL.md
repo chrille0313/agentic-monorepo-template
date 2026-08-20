@@ -27,7 +27,7 @@ Round N:
 
 1. **Implement**: spawn the `implementer` agent with the full spec text. On round 2+, message the *same* implementer (it has the context) with the reviewer's blocking findings verbatim.
 2. Sanity-check its report: if `STATUS: BLOCKED`, stop and surface it to the user.
-3. **Gate**: run check/test/build yourself on the finished diff. You own this run: the implementer checks only what it touched, and the reviewer takes your result as given. Red goes straight back to the implementer without consuming a round.
+3. **Gate**: run check/test/build yourself on the finished diff. You own this run: the implementer checks only what it touched, and the reviewer takes your result as given. Red goes back to the implementer without consuming a round, at most twice in a row; a third red gate ends the loop the way `STATUS: BLOCKED` does, with the failing output surfaced.
 4. **Review**: spawn a **fresh** `reviewer` agent each round (never reuse; fresh context is the point). Give it only the spec, the branch/diff reference, the round number, and the gate result. Never forward the implementer's report or reasoning.
 5. Route the verdict:
    - `APPROVE` → exit loop to step 4.

@@ -25,13 +25,15 @@ Debate studies recommend capping at 2-3 substantive exchanges: sycophancy grows 
 
 Rounds are not turns: the 3-round cap bounds implement/review *cycles*, `--max-turns` bounds steps inside a single agent, and workflow timeouts bound wall-clock time per CI run. Independent circuit breakers at independent levels.
 
+Every path that re-dispatches an agent needs a bound of its own, or it becomes a way around the others. A red gate is the case in point: it returns the work to the implementer without consuming a round, precisely because the implementer's own report is untrusted, so it is capped separately at two consecutive bounces before the loop stops the way a `BLOCKED` report does.
+
 ## Tests are a floor, not a verdict
 
 A large share of AI-generated code introduces security vulnerabilities *while passing unit tests* (Veracode 2025; [survey](https://arxiv.org/html/2508.00083v1)). Hence the independent security scan in CI and the reviewer's explicit duty to judge whether the tests themselves are meaningful.
 
 ## The human gate is weak unless informed
 
-Automation bias is measured: developers initially accepted 82% of AI suggestions but retained only 52% (Sabouri et al., ICSE 2025), and AI-authored PRs take about 12% more human review rounds. So PRs must carry evidence (criteria mapping, severity-ranked findings, what was executed), and the pipeline pre-resolves lint/format noise before a human ever looks. The merge gate is the last line of defense, not the only one: branch protection, turn caps, and the independence rule for parallel dispatches (no shared code, no dependencies between in-flight tasks, dispatch paced by review capacity) hold independently of human vigilance.
+Automation bias is measured: developers initially accepted 82% of AI suggestions but retained only 52% (Sabouri et al., ICSE 2025), and AI-authored PRs take about 12% more human review rounds. So PRs must carry evidence (criteria mapping, severity-ranked findings, what was executed), and the pipeline pre-resolves lint/format noise before a human ever looks. A reviewer's finding that the *spec* itself is wrong travels the same way: the loop never re-invokes the PM mid-task, since re-speccing would move the goalposts under the implementer, so that note reaches a human in the PR body instead. The merge gate is the last line of defense, not the only one: branch protection, turn caps, and the independence rule for parallel dispatches (no shared code, no dependencies between in-flight tasks, dispatch paced by review capacity) hold independently of human vigilance.
 
 ## Prompt philosophy
 
