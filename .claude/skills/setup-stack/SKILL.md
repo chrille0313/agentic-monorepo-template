@@ -13,7 +13,7 @@ Establish the stack with the user (language/framework, package manager, test run
 
 ## 2. Scaffold minimally
 
-Use the stack's official initializer where one exists, scaffolding into the repo's fixed monorepo layout (see CLAUDE.md): the first app in `apps/<name>`, shared code in `packages/<name>`, even for a single app. Wire up the stack's workspace tooling when it has one (pnpm workspaces, cargo workspaces, uv workspaces, Nx, moon, ...); a plain directory layout is fine when it doesn't. Keep it minimal: the loop needs something to lint, test, build, and run, not a demo app. Include at least one real passing test, so the contract's test command is meaningful from day one. Extend `.gitignore` for the stack.
+Use the stack's official initializer where one exists, scaffolding into the repo's fixed monorepo layout (see CLAUDE.md): the first app in `apps/<name>`, shared code in `packages/<name>`, even for a single app. Wire up the stack's workspace tooling when it has one (pnpm workspaces, cargo workspaces, uv workspaces, Nx, moon, ...); a plain directory layout is fine when it doesn't. Keep it minimal: the loop needs something to lint, test, build, and run, not a demo app; feature work is out of scope here and belongs in its own issue. Include at least one real passing test, so the contract's test command is meaningful from day one. Extend `.gitignore` for the stack.
 
 ## 3. Make the app agent-testable
 
@@ -26,16 +26,18 @@ Both must be reliable enough that red means "the app is broken", never "the harn
 
 ## 4. Fill the command contract
 
-Replace every `TODO` in CLAUDE.md's command-contract section with real commands. Wire check/test/build into the `gates` job of `.github/workflows/ci.yml`, above the generated-file drift step that ends that job, and smoke into its `smoke` job; as a PR gate rather than a per-round command, smoke can afford to be slower, as long as it stays reliable. The drift step assumes a hermetic build, so confirm it passes on a clean tree: anything the contract rewrites on every run belongs in `.gitignore`, or the command needs fixing. Also add the stack's package ecosystem to `.github/dependabot.yml` if it introduces one that isn't covered (npm is already active for the repo's toolchain; keep updates grouped). Then **verify each contract entry by running it**; a command that hasn't run green doesn't go in. Keep check/test/build fast and deterministic: they gate every inner-loop round.
+Replace every `TODO` in CLAUDE.md's command-contract section with real commands. Wire check/test/build into the `gates` job of `.github/workflows/ci.yml`, above the generated-file drift step that ends that job, and smoke into its `smoke` job; as a PR gate rather than a per-round command, smoke can afford to be slower, as long as it stays reliable. The drift step assumes a hermetic build, so confirm it passes on a clean tree: anything the contract rewrites on every run belongs in `.gitignore`, or the command needs fixing. Also add the stack's package ecosystem to `.github/dependabot.yml` if it introduces one that isn't covered (npm is already active for the repo's toolchain; keep updates grouped). Then **verify each contract entry by running it**: a command that hasn't run green doesn't go in, and green has to mean green on a fresh clone, not only against local state this machine happens to have. Keep check/test/build fast and deterministic: they gate every inner-loop round.
 
 ## 5. Releases and deploys
 
-Releasing (versioning, notes, tags) and deploying (shipping an app somewhere) are separate lifecycles; set them up separately. Do this now if the stack makes it cheap, otherwise leave it to the "Set up releases and deploys" backlog item for when there is something to release. What done looks like:
+Releasing (versioning, notes, tags) and deploying (shipping an app somewhere) are separate lifecycles; set them up separately. Do this now if the stack makes it cheap, otherwise file it as an issue ("Set up releases and deploys") for when there is something to release, using what follows as that issue's acceptance criteria. What done looks like:
 
 - Each releasable app/package can be versioned and released on its own, with tooling that fits the stack (changesets, release-please manifest mode, release-plz, ...).
 - Releasing collects the user-facing notes PRs ship with (a CLAUDE.md convention) into the release notes, so pick tooling with a place for such notes and wire up what "a note" concretely is (a changeset file, a changelog fragment, ...). The commit log never becomes release notes.
 - Each deployable app has its own deploy workflow with its own trigger and steps (cloud deploy, package publish, docs site, ...).
 - Any new action is pinned to a full commit SHA.
+
+Out of scope either way: provisioning cloud infrastructure or accounts. That is the user's to do, whenever they choose to.
 
 ## 6. Configure the repo on GitHub
 
@@ -52,5 +54,5 @@ The auth secret for the CI modes stays manual: the user adds `CLAUDE_CODE_OAUTH_
 ## 7. Finish
 
 - Update the README title/intro to name the project (keep the loop documentation).
-- Mark the "Set up the stack" task done in BACKLOG.md (or close the issue).
+- Close the setup issue if one tracked this work.
 - Suggest next steps: add the auth secret if they want the CI modes, then `/pm` or `/build` to start the loop.

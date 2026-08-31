@@ -34,8 +34,7 @@ This is a monorepo with a fixed structure, independent of stack and tooling:
 
 ## Backlog
 
-- If the repo has a GitHub remote, **GitHub Issues are the backlog**. Use `gh issue list/view`.
-- Otherwise, [BACKLOG.md](BACKLOG.md) is the backlog.
+- **GitHub Issues are the backlog.** Use `gh issue list/view`. The pipeline has no other backlog: without a GitHub remote, say so and stop rather than tracking work somewhere else.
 - A task is **ready** when it has a spec: goal, acceptance criteria, out-of-scope, verification plan.
 - Dependencies: label the dependent issue `blocked` and write "Blocked by #N" in its body. The PM removes the label once every blocker is closed.
 - The `in-progress` label marks a task actively being worked; `/build` sets and clears it.
