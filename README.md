@@ -25,7 +25,7 @@ Plan a feature once, then let the pipeline carry it: a **PM agent** triages the 
 ```mermaid
 flowchart LR
     subgraph outer ["Outer loop &nbsp;·&nbsp; orchestrate"]
-        backlog[("Backlog")] --> pm["PM agent<br>triage · pick one · spec"]
+        issues[("Issues")] --> pm["PM agent<br>triage · pick one · spec"]
     end
 
     subgraph inner ["Inner loop &nbsp;·&nbsp; max 3 rounds"]
@@ -35,7 +35,7 @@ flowchart LR
 
     pm -- "task spec" --> impl
     rev -- "APPROVE" --> pr["PR + evidence"] --> gate{{"Human<br>merge gate"}}
-    gate -- "merge" --> backlog
+    gate -- "merge" --> issues
 ```
 
 - **Inner loop** (evaluator-optimizer): the implement/gate/review cycle. The implementer builds against a task spec, the loop controller runs the command contract once on the finished diff, then a reviewer with completely fresh context judges it, grounded in behavior it actually exercised. Findings cycle back until approval, an iteration cap, or a no-progress exit.
@@ -84,7 +84,6 @@ packages/          shared libraries used by apps
 .github/workflows/ ci.yml (contract gates, smoke journeys, commit lint, workflow lint, security scan),
                    agent-task.yml (label-triggered inner loop), pm-cron.yml (scheduled PM)
 docs/DESIGN.md     the research-backed rationale for every design choice
-BACKLOG.md         local backlog fallback when GitHub Issues aren't available
 CLAUDE.md          conventions + the command contract every agent relies on
 ```
 

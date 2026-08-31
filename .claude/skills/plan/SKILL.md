@@ -31,7 +31,7 @@ A coherent surface — a page, a user flow, a design system, a resource end-to-e
 
 **If it is several**:
 
-- One issue per task in the PM spec format (goal, acceptance criteria, out of scope, verification plan). `gh issue create` when a remote exists; BACKLOG.md sections otherwise.
+- One issue per task in the PM spec format (goal, acceptance criteria, out of scope, verification plan). Create them with `gh issue create`.
 - Label issues whose prerequisites aren't merged yet `blocked`, with "Blocked by #N" in the body.
 - When the spread of issues makes progress hard to read, group them under a milestone and assign every issue to it. `gh` has no milestone command; create it with `gh api`, putting the ordering and rationale in its description.
 - Report what was created and offer the first dispatch: `/build` on the first task, or the `agent` label to run it in CI.

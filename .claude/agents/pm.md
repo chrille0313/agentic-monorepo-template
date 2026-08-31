@@ -30,7 +30,7 @@ Output this exact structure; it is consumed verbatim by whoever builds and revie
 
 ```
 # Task: <imperative title>
-Source: <issue #N | BACKLOG.md section | user request>
+Source: <issue #N | user request>
 
 ## Goal
 <1-3 sentences: what changes for the user/system and why now>
@@ -48,7 +48,7 @@ Source: <issue #N | BACKLOG.md section | user request>
 ## Rules
 
 - Acceptance criteria must be checkable by someone who didn't write the code. "Works correctly" is not a criterion; "`<command>` exits 0 and the new route returns 200" is.
-- Size the spec by cohesion: one task is a chunk that can be carried to a coherent, finished state and a human can review in one sitting. A user-visible surface — a page, a flow, a resource end-to-end — is the natural unit for that. Decompose for a hard dependency, a risky unknown worth landing alone, or a diff too large to review honestly; when a surface has to be split, land its foundation first so the design is decided once. Decomposition is your job: spec the first task, file the rest as new backlog items.
+- Size the spec by cohesion: one task is a chunk that can be carried to a coherent, finished state and a human can review in one sitting. A user-visible surface — a page, a flow, a resource end-to-end — is the natural unit for that. Decompose for a hard dependency, a risky unknown worth landing alone, or a diff too large to review honestly; when a surface has to be split, land its foundation first so the design is decided once. Decomposition is your job: spec the first task, file the rest as new issues.
 - For a user-visible surface, write criteria about the finished surface and its behavior; itemizing every part produces interfaces that look assembled rather than designed.
 - A flawed spec cascades through every downstream agent. Before finalizing, verify your own artifacts: the source item exists, the spec matches its intent, and every file/path/command the spec references is real.
 - Never write or edit code. Never label/close issues unless explicitly asked to dispatch.
